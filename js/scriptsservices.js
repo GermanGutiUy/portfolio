@@ -1,59 +1,63 @@
-document.addEventListener("DOMContentLoaded", function() {
-  let serviciosSeleccionados = []; // Array para almacenar los servicios seleccionados
+document.addEventListener("DOMContentLoaded", function () {
+    let serviciosSeleccionados = JSON.parse(localStorage.getItem("servicios")) || []; // Cargar desde localStorage
 
-  // Función que maneja agregar o eliminar servicios
-  function manejarServicio(servicio) {
-      console.log(`Se hizo clic en el servicio: ${servicio}`); // Verificar si la función se llama correctamente
-      const index = serviciosSeleccionados.indexOf(servicio);
-      
-      if (index === -1) {
-          // Si el servicio no está en el array, lo agrega
-          serviciosSeleccionados.push(servicio);
-          alert("El servicio de " + servicio + " ha sido agregado.");
-      } else {
-          // Si el servicio ya está, lo elimina
-          serviciosSeleccionados.splice(index, 1);
-          alert("El servicio de " + servicio + " ha sido eliminado.");
-      }
+    function actualizarUI() {
+        localStorage.setItem("servicios", JSON.stringify(serviciosSeleccionados));
+        const listaServicios = document.getElementById("listaServicios");
+        if (listaServicios) {
+            listaServicios.innerHTML = "";
+            serviciosSeleccionados.forEach(servicio => {
+                let item = document.createElement("li");
+                item.textContent = servicio;
+                item.classList.add("list-group-item");
+                listaServicios.appendChild(item);
+            });
+        }
+    }
 
-      // Mostrar los servicios seleccionados en consola
-      console.log("Servicios seleccionados: ", serviciosSeleccionados);
+    function manejarServicio(servicio) {
+        console.log(`Se hizo clic en el servicio: ${servicio}`);
+        const index = serviciosSeleccionados.indexOf(servicio);
+        
+        if (index === -1) {
+            serviciosSeleccionados.push(servicio);
+            alert(`✅ El servicio de ${servicio} ha sido agregado.`);
+        } else {
+            serviciosSeleccionados.splice(index, 1);
+            alert(`❌ El servicio de ${servicio} ha sido eliminado.`);
+        }
+        actualizarUI();
+    }
 
-      // Usamos un prompt para que el usuario ingrese su nombre
-      let nombreUsuario = prompt("¡Gracias por elegir el servicio de " + servicio + "! ¿Cuál es tu nombre?");
-      
-      // Condicional para verificar que el nombre no esté vacío
-      if (nombreUsuario) {
-          // Usamos confirm para preguntar si desea continuar con el servicio
-          let confirmar = confirm("¿Estás seguro de que quieres contratar el servicio de " + servicio + "?");
-          
-          // Si el usuario confirma
-          if (confirmar) {
-              console.log("El usuario " + nombreUsuario + " ha contratado el servicio de " + servicio);
-              alert("¡Gracias, " + nombreUsuario + "! Has contratado el servicio de " + servicio + ". Te contactaremos pronto.");
-          } else {
-              console.log("El usuario " + nombreUsuario + " decidió no contratar el servicio de " + servicio);
-              alert("¡Hasta luego, " + nombreUsuario + "! Esperamos verte pronto.");
-          }
-      } else {
-          alert("Por favor, ingresa tu nombre para continuar.");
-      }
-  }
+    document.querySelectorAll("button[data-servicio]").forEach(boton => {
+        boton.addEventListener("click", function () {
+            const servicio = boton.getAttribute("data-servicio");
+            manejarServicio(servicio);
+        });
+    });
 
-  // Asignar los eventos de clic a los botones
-  document.getElementById("btnDesarrolloWeb").addEventListener("click", function() {
-      manejarServicio("Desarrollo Web");
-  });
-  
-  document.getElementById("btnAnalisisDatos").addEventListener("click", function() {
-      manejarServicio("Análisis de Datos");
-  });
+    document.getElementById("btnFinalizar").addEventListener("click", function () {
+        if (serviciosSeleccionados.length === 0) {
+            alert("⚠️ No has seleccionado ningún servicio.");
+            return;
+        }
 
-  document.getElementById("btnAutomatizacion").addEventListener("click", function() {
-      manejarServicio("Automatización de Procesos");
-  });
+        let nombreUsuario = prompt("¡Gracias por elegir nuestros servicios! ¿Cuál es tu nombre?");
+        if (!nombreUsuario) {
+            alert("Por favor, ingresa tu nombre para continuar.");
+            return;
+        }
 
-  document.getElementById("btnPowerBi").addEventListener("click", function() {
-      manejarServicio("Desarrollo Power Bi");
-  });
+        let confirmar = confirm(`¿Estás seguro de que quieres contratar los servicios seleccionados?\n${serviciosSeleccionados.join(", ")}`);
+        if (confirmar) {
+            alert(`🎉 ¡Gracias, ${nombreUsuario}! Nos pondremos en contacto contigo pronto.`);
+            localStorage.removeItem("servicios");
+            serviciosSeleccionados = [];
+            actualizarUI();
+        } else {
+            alert("No hay problema, puedes seguir explorando.");
+        }
+    });
+
+    actualizarUI();
 });
