@@ -112,21 +112,22 @@ fetch('../productos.json')
         }
     };
 
-    // Redirigir a otra página cuando se hace clic en "¡Empezamos!"
-    if (btnEmpezar) {
-        btnEmpezar.onclick = function() {
-            if (carrito.length === 0) {
-                // Mostrar un error si el carrito está vacío
-                alert("⚠️ Para contactar por un servicio, se debe seleccionar un servicio.");
-                return; // Detener la redirección si el carrito está vacío
-            }
-            // Vaciar el carrito antes de redirigir
-            carrito = [];
-            localStorage.removeItem("carrito");
-            actualizarCarrito();
-            window.location.href = 'contact_con_carrito.html';
-        };
-    }
+// Redirigir a otra página cuando se hace clic en "¡Empezamos!"
+if (btnEmpezar) {
+    btnEmpezar.onclick = function() {
+        if (carrito.length === 0) {
+            // Mostrar un error si el carrito está vacío
+            alert("⚠️ Para contactar por un servicio, se debe seleccionar un servicio.");
+            return; // Detener la redirección si el carrito está vacío
+        }
+
+        // Guardar el carrito en localStorage antes de redirigir
+        localStorage.setItem("carrito", JSON.stringify(carrito));
+
+        // Redirigir a la página de contacto
+        window.location.href = 'contact_con_carrito.html';
+    };
+}
 
     // Botón para vaciar el carrito
     const btnVaciar = document.getElementById("vaciar-btn");
@@ -146,4 +147,25 @@ fetch('../productos.json')
 document.addEventListener("DOMContentLoaded", function () {
     let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
     actualizarListaProductos();
+});
+
+// Al cargar la página de contacto
+document.addEventListener("DOMContentLoaded", function () {
+    // Recuperar el carrito del localStorage
+    let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
+
+    if (carrito.length === 0) {
+        alert("⚠️ No hay servicios seleccionados.");
+    } else {
+        // Mostrar los servicios en la lista
+        const listaServicios = document.getElementById("productos-seleccionados");
+        if (!listaServicios) return;
+
+        carrito.forEach(producto => {
+            let item = document.createElement("li");
+            item.textContent = producto.nombre;
+            item.classList.add("list-group-item");
+            listaServicios.appendChild(item);
+        });
+    }
 });
