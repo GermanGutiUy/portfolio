@@ -100,14 +100,20 @@ fetch('../productos.json')
 });
 
 document.addEventListener("DOMContentLoaded", function () {
-  const carrito = JSON.parse(localStorage.getItem("carrito")) || [];
-  const messageField = document.getElementById("message");
+  let serviciosSeleccionados = JSON.parse(localStorage.getItem("servicios")) || [];
+  const listaProductos = document.getElementById("productos-seleccionados");
 
-  if (carrito.length > 0) {
-      // Convertimos el array de productos en un texto con saltos de línea
-      const productosTexto = carrito.map(producto => `- ${producto.nombre}`).join("\n");
-      messageField.value = `Estoy interesado en los siguientes servicios:\n\n${productosTexto}`;
-  } else {
-      messageField.value = "No hay productos seleccionados.";
+  function actualizarListaProductos() {
+      listaProductos.innerHTML = ""; // Limpiar la lista antes de actualizar
+      serviciosSeleccionados.forEach(servicio => {
+          let item = document.createElement("li");
+          item.textContent = servicio;
+          item.classList.add("list-group-item");
+          listaProductos.appendChild(item);
+      });
   }
+
+  // Llamar a la función para actualizar la lista al cargar la página
+  actualizarListaProductos();
 });
+
