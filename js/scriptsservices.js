@@ -1,12 +1,8 @@
-// Cargar el archivo JSON con los servicios
+// Cargar el archivo JSON con los productos
 fetch('../productos.json')
-  .then(response => {
-    console.log('Response:', response);
-    return response.json();
-  })
+  .then(response => response.json())
   .then(productos => {
-    console.log('Productos:', productos);  // Verifica los datos recibidos
-    const container = document.querySelector('#servicios-container');  // Asegúrate de que el contenedor exista
+    const container = document.querySelector('#servicios-container'); // Contenedor para los productos
     
     productos.forEach(producto => {
       const productCard = `
@@ -17,7 +13,7 @@ fetch('../productos.json')
                 <div class="p-5">
                   <h2 class="fw-bolder">${producto.nombre}</h2>
                   <p>${producto.descripcion}</p>
-                  <button class="btn btn-outline-dark btn-lg px-5 py-3 fs-6 fw-bolder" data-servicio="${producto.nombre}" id="${producto.id}">¡Empecemos!</button>
+                  <button class="btn btn-outline-dark btn-lg px-5 py-3 fs-6 fw-bolder" data-producto="${producto.nombre}" data-id="${producto.id}" data-precio="${producto.precio}">Añadir al Carrito</button>
                 </div>
                 <img class="img-fluid" src="${producto.imagen}" alt="Imagen de ${producto.nombre}" />
               </div>
@@ -28,73 +24,76 @@ fetch('../productos.json')
       container.innerHTML += productCard;
     });
 
-    // Asociar los eventos de los botones de los servicios generados dinámicamente
-    document.querySelectorAll("button[data-servicio]").forEach(boton => {
-      boton.addEventListener("click", function () {
-        const servicio = boton.getAttribute("data-servicio");
-        manejarServicio(servicio);  // Aquí es donde se conecta con la función manejarServicio
-      });
-    });
-  })
-  .catch(error => console.error('Error al cargar los productos:', error));
+    // Lógica para manejar el carrito
+    let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
 
+    function actualizarCarrito() {
+        localStorage.setItem("carrito", JSON.stringify(carrito));
 
-// Interacción con el botón "¡Empecemos!" para agregar o eliminar el servicio
-document.addEventListener("DOMContentLoaded", function () {
-    let serviciosSeleccionados = JSON.parse(localStorage.getItem("servicios")) || []; // Cargar desde localStorage
-
-    function actualizarUI() {
-        localStorage.setItem("servicios", JSON.stringify(serviciosSeleccionados));
-        const listaServicios = document.getElementById("listaServicios");
-        if (listaServicios) {
-            listaServicios.innerHTML = "";
-            serviciosSeleccionados.forEach(servicio => {
-                let item = document.createElement("li");
-                item.textContent = servicio;
-                item.classList.add("list-group-item");
-                listaServicios.appendChild(item);
-            });
-        }
-    }
-
-    function manejarServicio(servicio) {
-        console.log(`Se hizo clic en el servicio: ${servicio}`);
-        const index = serviciosSeleccionados.indexOf(servicio);
+        const listaProductos = document.getElementById("productos-lista");
+        const totalElement = document.getElementById("total");
+        listaProductos.innerHTML = "";
         
-        if (index === -1) {
-            serviciosSeleccionados.push(servicio);
-            alert(`✅ El servicio de ${servicio} ha sido agregado.`);
-        } else {
-            serviciosSeleccionados.splice(index, 1);
-            alert(`❌ El servicio de ${servicio} ha sido eliminado.`);
-        }
-        actualizarUI();
+        let total = 0;
+
+        carrito.forEach(producto => {
+            let item = document.createElement("li");
+            item.textContent = `${producto.nombre} - $${producto.precio} x ${producto.cantidad}`;
+            listaProductos.appendChild(item);
+            total += producto.precio * producto.cantidad;
+        });
+
+        totalElement.innerHTML = `<p>Total: $${total}</p>`;
     }
 
-    // Finalizar selección de servicios
-    document.getElementById("btnFinalizar").addEventListener("click", function () {
-        if (serviciosSeleccionados.length === 0) {
-            alert("⚠️ No has seleccionado ningún servicio.");
-            return;
-        }
+    // Función para agregar o eliminar productos del carrito
+    function manejarProducto(producto) {
+        const index = carrito.findIndex(item => item.id === producto.id);
 
-        let nombreUsuario = prompt("¡Gracias por elegir nuestros servicios! ¿Cuál es tu nombre?");
-        if (!nombreUsuario) {
-            alert("Por favor, ingresa tu nombre para continuar.");
-            return;
-        }
-
-        let confirmar = confirm(`¿Estás seguro de que quieres contratar los servicios seleccionados?\n${serviciosSeleccionados.join(", ")}`);
-        if (confirmar) {
-            alert(`🎉 ¡Gracias, ${nombreUsuario}! Nos pondremos en contacto contigo pronto.`);
-            localStorage.removeItem("servicios");
-            serviciosSeleccionados = [];
-            actualizarUI();
+        if (index === -1) {
+            producto.cantidad = 1;
+            carrito.push(producto);
+            alert(`✅ El producto ${producto.nombre} ha sido añadido al carrito.`);
         } else {
-            alert("No hay problema, puedes seguir explorando.");
+            carrito[index].cantidad++;
+            alert(`✅ El producto ${producto.nombre} ha sido agregado. Cantidad: ${carrito[index].cantidad}`);
         }
+
+        actualizarCarrito();
+    }
+
+    // Asociar los eventos de los botones de "Añadir al Carrito"
+    document.querySelectorAll("button[data-producto]").forEach(boton => {
+        boton.addEventListener("click", function () {
+            const producto = {
+                id: boton.getAttribute("data-id"),
+                nombre: boton.getAttribute("data-producto"),
+                precio: parseFloat(boton.getAttribute("data-precio")),
+            };
+            manejarProducto(producto);
+        });
     });
 
-    // Actualizar la UI con los servicios previamente seleccionados
-    actualizarUI();
+    // Mostrar el carrito en un modal
+    const modal = document.getElementById("carrito-modal");
+    const btnCarrito = document.getElementById("carrito-btn");
+    const closeBtn = document.getElementById("close-btn");
+
+    btnCarrito.onclick = function() {
+        modal.style.display = "block";
+        actualizarCarrito();
+    }
+
+    closeBtn.onclick = function() {
+        modal.style.display = "none";
+    }
+
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+
+    // Actualizar carrito al cargar la página
+    actualizarCarrito();
 });
