@@ -1,0 +1,26 @@
+[
+  {
+    "nombre": "Desarrollo Web",
+    "descripcion": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius at enim eum illum aperiam placeat esse? Mollitia omnis minima saepe recusandae libero, iste ad asperiores! Explicabo commodi quo itaque! Ipsam!",
+    "imagen": "https://dummyimage.com/300x400/343a40/6c757d",
+    "id": "btnDesarrolloWeb"
+  },
+  {
+    "nombre": "Análisis de Datos",
+    "descripcion": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius at enim eum illum aperiam placeat esse? Mollitia omnis minima saepe recusandae libero, iste ad asperiores! Explicabo commodi quo itaque! Ipsam!",
+    "imagen": "https://dummyimage.com/300x400/343a40/6c757d",
+    "id": "btnAnalisisDatos"
+  },
+  {
+    "nombre": "Automatización de Procesos",
+    "descripcion": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius at enim eum illum aperiam placeat esse? Mollitia omnis minima saepe recusandae libero, iste ad asperiores! Explicabo commodi quo itaque! Ipsam!",
+    "imagen": "https://dummyimage.com/300x400/343a40/6c757d",
+    "id": "btnAutomatizacion"
+  },
+  {
+    "nombre": "Desarrollo Power Bi",
+    "descripcion": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius at enim eum illum aperiam placeat esse? Mollitia omnis minima saepe recusandae libero, iste ad asperiores! Explicabo commodi quo itaque! Ipsam!",
+    "imagen": "https://dummyimage.com/300x400/343a40/6c757d",
+    "id": "btnPowerBi"
+  }
+]
