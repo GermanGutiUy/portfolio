@@ -102,6 +102,15 @@ fetch('../productos.json')
     actualizarCarrito();
 });
 
+const btnVaciar = document.getElementById("vaciar-btn"); // Obtener el botón "Vaciar"
+
+btnVaciar.onclick = function () {
+    carrito = []; // Vaciar el array del carrito
+    localStorage.removeItem("carrito"); // Eliminarlo del localStorage
+    actualizarCarrito(); // Actualizar la vista del carrito
+};
+
+
 // Mostrar el listado de productos seleccionados en el formulario
 document.addEventListener("DOMContentLoaded", function () {
     let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
