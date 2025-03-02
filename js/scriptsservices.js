@@ -34,11 +34,8 @@ fetch('../productos.json')
 
 
 
-
-
-
-/*
-document.addEventListener("DOMContentLoaded", function () {
+//interaccion con el boton Empecemos
+  document.addEventListener("DOMContentLoaded", function () {
     let serviciosSeleccionados = JSON.parse(localStorage.getItem("servicios")) || []; // Cargar desde localStorage
 
     function actualizarUI() {
@@ -69,13 +66,47 @@ document.addEventListener("DOMContentLoaded", function () {
         actualizarUI();
     }
 
-    document.querySelectorAll("button[data-servicio]").forEach(boton => {
-        boton.addEventListener("click", function () {
-            const servicio = boton.getAttribute("data-servicio");
-            manejarServicio(servicio);
+    // Cargar el archivo JSON con los servicios
+    fetch('../productos.json')
+      .then(response => {
+        console.log('Response:', response);
+        return response.json();
+      })
+      .then(productos => {
+        console.log('Productos:', productos);  // Verifica los datos recibidos
+        const container = document.querySelector('#servicios-container');
+        
+        productos.forEach(producto => {
+            const productCard = `
+              <div class="col-lg-11 col-xl-9 col-xxl-8">
+                <div class="card overflow-hidden shadow rounded-4 border-0 mb-5">
+                  <div class="card-body p-0">
+                    <div class="d-flex align-items-center">
+                      <div class="p-5">
+                        <h2 class="fw-bolder">${producto.nombre}</h2>
+                        <p>${producto.descripcion}</p>
+                        <button class="btn btn-outline-dark btn-lg px-5 py-3 fs-6 fw-bolder" data-servicio="${producto.nombre}" id="${producto.id}">¡Empecemos!</button>
+                      </div>
+                      <img class="img-fluid" src="${producto.imagen}" alt="Imagen de ${producto.nombre}" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            `;
+            container.innerHTML += productCard;
         });
-    });
 
+        // Asociar los eventos de los botones de los servicios generados dinámicamente
+        document.querySelectorAll("button[data-servicio]").forEach(boton => {
+            boton.addEventListener("click", function () {
+                const servicio = boton.getAttribute("data-servicio");
+                manejarServicio(servicio);
+            });
+        });
+      })
+      .catch(error => console.error('Error al cargar los productos:', error));
+
+    // Finalizar selección de servicios
     document.getElementById("btnFinalizar").addEventListener("click", function () {
         if (serviciosSeleccionados.length === 0) {
             alert("⚠️ No has seleccionado ningún servicio.");
@@ -99,6 +130,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
+    // Actualizar la UI con los servicios previamente seleccionados
     actualizarUI();
 });
- */
