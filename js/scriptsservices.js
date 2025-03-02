@@ -98,3 +98,16 @@ fetch('../productos.json')
     // Actualizar carrito al cargar la página
     actualizarCarrito();
 });
+
+document.addEventListener("DOMContentLoaded", function () {
+  const carrito = JSON.parse(localStorage.getItem("carrito")) || [];
+  const messageField = document.getElementById("message");
+
+  if (carrito.length > 0) {
+      // Convertimos el array de productos en un texto con saltos de línea
+      const productosTexto = carrito.map(producto => `- ${producto.nombre}`).join("\n");
+      messageField.value = `Estoy interesado en los siguientes servicios:\n\n${productosTexto}`;
+  } else {
+      messageField.value = "No hay productos seleccionados.";
+  }
+});
