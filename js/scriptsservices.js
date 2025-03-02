@@ -24,7 +24,7 @@ fetch('../productos.json')
       container.innerHTML += productCard;
     });
 
-    // Lógica para manejar el carrito
+    // Obtener el carrito desde localStorage
     let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
 
     function actualizarCarrito() {
@@ -38,6 +38,9 @@ fetch('../productos.json')
             item.textContent = producto.nombre; // Solo el nombre del servicio
             listaProductos.appendChild(item);
         });
+
+        // También actualizamos la vista de productos seleccionados en el formulario
+        actualizarListaProductos();
     }
 
     // Función para agregar productos al carrito
@@ -99,21 +102,21 @@ fetch('../productos.json')
     actualizarCarrito();
 });
 
+// Mostrar el listado de productos seleccionados en el formulario
 document.addEventListener("DOMContentLoaded", function () {
-  let serviciosSeleccionados = JSON.parse(localStorage.getItem("servicios")) || [];
-  const listaProductos = document.getElementById("productos-seleccionados");
+    let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
+    const listaProductos = document.getElementById("productos-seleccionados");
 
-  function actualizarListaProductos() {
-      listaProductos.innerHTML = ""; // Limpiar la lista antes de actualizar
-      serviciosSeleccionados.forEach(servicio => {
-          let item = document.createElement("li");
-          item.textContent = servicio;
-          item.classList.add("list-group-item");
-          listaProductos.appendChild(item);
-      });
-  }
+    function actualizarListaProductos() {
+        listaProductos.innerHTML = ""; // Limpiar la lista antes de actualizar
+        carrito.forEach(producto => {
+            let item = document.createElement("li");
+            item.textContent = producto.nombre;
+            item.classList.add("list-group-item");
+            listaProductos.appendChild(item);
+        });
+    }
 
-  // Llamar a la función para actualizar la lista al cargar la página
-  actualizarListaProductos();
+    // Llamar a la función para actualizar la lista al cargar la página
+    actualizarListaProductos();
 });
-
