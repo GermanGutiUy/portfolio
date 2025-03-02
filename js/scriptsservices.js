@@ -13,7 +13,10 @@ fetch('../productos.json')
                 <div class="p-5">
                   <h2 class="fw-bolder">${producto.nombre}</h2>
                   <p>${producto.descripcion}</p>
-                  <button class="btn btn-outline-dark btn-lg px-5 py-3 fs-6 fw-bolder" data-producto="${producto.nombre}" data-id="${producto.id}">Añadir al Carrito</button>
+                  <button class="btn btn-outline-dark btn-lg px-5 py-3 fs-6 fw-bolder" 
+                    data-producto="${producto.nombre}" data-id="${producto.id}">
+                    Añadir al Carrito
+                  </button>
                 </div>
                 <img class="img-fluid" src="${producto.imagen}" alt="Imagen de ${producto.nombre}" />
               </div>
@@ -31,19 +34,36 @@ fetch('../productos.json')
         localStorage.setItem("carrito", JSON.stringify(carrito));
 
         const listaProductos = document.getElementById("productos-lista");
-        if (listaProductos) {
-            listaProductos.innerHTML = ""; // Limpiar la lista antes de agregar los productos
-            carrito.forEach(producto => {
-                let item = document.createElement("li");
-                item.textContent = producto.nombre; // Solo el nombre del servicio
-                listaProductos.appendChild(item);
-            });
-        }
+        if (!listaProductos) return; // Evitar errores si el elemento no existe
+        
+        listaProductos.innerHTML = ""; // Limpiar la lista antes de agregar los productos
 
-        actualizarListaProductos(); // Actualizar formulario
+        carrito.forEach(producto => {
+            let item = document.createElement("li");
+            item.textContent = producto.nombre; // Solo el nombre del servicio
+            listaProductos.appendChild(item);
+        });
+
+        // También actualizamos la vista de productos seleccionados en el formulario
+        actualizarListaProductos();
     }
 
+    function actualizarListaProductos() {
+        const listaProductos = document.getElementById("productos-seleccionados");
+        if (!listaProductos) return; // Evitar errores si el elemento no existe
+
+        listaProductos.innerHTML = ""; // Limpiar la lista antes de actualizar
+        carrito.forEach(producto => {
+            let item = document.createElement("li");
+            item.textContent = producto.nombre;
+            item.classList.add("list-group-item");
+            listaProductos.appendChild(item);
+        });
+    }
+
+    // Función para agregar productos al carrito
     function manejarProducto(producto) {
+        // Evitar duplicados
         const index = carrito.findIndex(item => item.id === producto.id);
         if (index === -1) {
             carrito.push(producto);
@@ -54,6 +74,7 @@ fetch('../productos.json')
         actualizarCarrito();
     }
 
+    // Asociar los eventos de los botones de "Añadir al Carrito"
     document.querySelectorAll("button[data-producto]").forEach(boton => {
         boton.addEventListener("click", function () {
             const producto = {
@@ -96,13 +117,11 @@ fetch('../productos.json')
                 alert("⚠️ No has seleccionado ningún servicio.");
                 return;
             }
-            
-            // Enviar productos seleccionados en una query string
-            const productosSeleccionados = carrito.map(p => encodeURIComponent(p.nombre)).join(",");
-            carrito = []; // Vaciar el carrito
-            localStorage.removeItem("carrito"); // Eliminar del localStorage
-            actualizarCarrito(); // Actualizar la vista
-            window.location.href = `pagina-de-servicios.html?productos=${productosSeleccionados}`;
+            // Vaciar el carrito antes de redirigir
+            carrito = [];
+            localStorage.removeItem("carrito");
+            actualizarCarrito();
+            window.location.href = 'pagina-de-servicios.html';
         };
     }
 
@@ -116,25 +135,12 @@ fetch('../productos.json')
         };
     }
 
-    // Mostrar el listado de productos seleccionados en el formulario
-    const listaProductos = document.getElementById("productos-seleccionados");
+    // Actualizar carrito al cargar la página
+    actualizarCarrito();
+});
 
-    function actualizarListaProductos() {
-        if (listaProductos) {
-            listaProductos.innerHTML = ""; // Limpiar la lista antes de actualizar
-            carrito.forEach(producto => {
-                let item = document.createElement("li");
-                item.textContent = producto.nombre;
-                item.classList.add("list-group-item");
-                listaProductos.appendChild(item);
-            });
-        }
-    }
-
-    document.addEventListener("DOMContentLoaded", function () {
-        carrito = JSON.parse(localStorage.getItem("carrito")) || [];
-        actualizarListaProductos();
-    });
-
-    actualizarCarrito(); // Actualizar carrito al cargar la página
+// Mostrar el listado de productos seleccionados en el formulario al cargar la página
+document.addEventListener("DOMContentLoaded", function () {
+    let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
+    actualizarListaProductos();
 });
