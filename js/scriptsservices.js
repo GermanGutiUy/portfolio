@@ -30,6 +30,21 @@ fetch('../productos.json')
     // Obtener el carrito desde localStorage
     let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
 
+    // Función para actualizar la lista de productos en el carrito
+    function actualizarListaProductos() {
+        const listaProductos = document.getElementById("productos-seleccionados");
+        if (!listaProductos) return; // Evitar errores si el elemento no existe
+
+        listaProductos.innerHTML = ""; // Limpiar la lista antes de actualizar
+        carrito.forEach(producto => {
+            let item = document.createElement("li");
+            item.textContent = producto.nombre;
+            item.classList.add("list-group-item");
+            listaProductos.appendChild(item);
+        });
+    }
+
+    // Función para actualizar el carrito en el almacenamiento local y en la vista
     function actualizarCarrito() {
         localStorage.setItem("carrito", JSON.stringify(carrito));
 
@@ -46,19 +61,6 @@ fetch('../productos.json')
 
         // También actualizamos la vista de productos seleccionados en el formulario
         actualizarListaProductos();
-    }
-
-    function actualizarListaProductos() {
-        const listaProductos = document.getElementById("productos-seleccionados");
-        if (!listaProductos) return; // Evitar errores si el elemento no existe
-
-        listaProductos.innerHTML = ""; // Limpiar la lista antes de actualizar
-        carrito.forEach(producto => {
-            let item = document.createElement("li");
-            item.textContent = producto.nombre;
-            item.classList.add("list-group-item");
-            listaProductos.appendChild(item);
-        });
     }
 
     // Función para agregar productos al carrito
@@ -110,12 +112,13 @@ fetch('../productos.json')
         }
     };
 
-    // Redirigir a otra página cuando se hace clic en "¡Empecemos!"
+    // Redirigir a otra página cuando se hace clic en "¡Empezamos!"
     if (btnEmpezar) {
         btnEmpezar.onclick = function() {
             if (carrito.length === 0) {
-                alert("⚠️ No has seleccionado ningún servicio.");
-                return;
+                // Mostrar un error si el carrito está vacío
+                alert("⚠️ Para contactar por un servicio, se debe seleccionar un servicio.");
+                return; // Detener la redirección si el carrito está vacío
             }
             // Vaciar el carrito antes de redirigir
             carrito = [];
