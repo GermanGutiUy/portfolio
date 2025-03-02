@@ -11776,4 +11776,15 @@ html {
 
 #container_profile {
   display: -webkit-inline-box;
+  display: inline-flex; /* Asegura compatibilidad con navegadores más recientes */
+  flex-wrap: wrap; /* Permite que los elementos se ajusten en pantallas pequeñas */
+  justify-content: center; /* Centra los elementos */
+  gap: 10px; /* Espaciado entre los elementos */
+}
+
+@media (max-width: 768px) {
+  #container_profile {
+    flex-direction: column; /* Cambia la dirección de los elementos a columna en pantallas pequeñas */
+    align-items: center; /* Alinea los elementos al centro */
+  }
 }
