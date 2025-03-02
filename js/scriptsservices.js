@@ -31,21 +31,19 @@ fetch('../productos.json')
         localStorage.setItem("carrito", JSON.stringify(carrito));
 
         const listaProductos = document.getElementById("productos-lista");
-        listaProductos.innerHTML = ""; // Limpiar la lista antes de agregar los productos
+        if (listaProductos) {
+            listaProductos.innerHTML = ""; // Limpiar la lista antes de agregar los productos
+            carrito.forEach(producto => {
+                let item = document.createElement("li");
+                item.textContent = producto.nombre; // Solo el nombre del servicio
+                listaProductos.appendChild(item);
+            });
+        }
 
-        carrito.forEach(producto => {
-            let item = document.createElement("li");
-            item.textContent = producto.nombre; // Solo el nombre del servicio
-            listaProductos.appendChild(item);
-        });
-
-        // También actualizamos la vista de productos seleccionados en el formulario
-        actualizarListaProductos();
+        actualizarListaProductos(); // Actualizar formulario
     }
 
-    // Función para agregar productos al carrito
     function manejarProducto(producto) {
-        // Evitar duplicados
         const index = carrito.findIndex(item => item.id === producto.id);
         if (index === -1) {
             carrito.push(producto);
@@ -56,7 +54,6 @@ fetch('../productos.json')
         actualizarCarrito();
     }
 
-    // Asociar los eventos de los botones de "Añadir al Carrito"
     document.querySelectorAll("button[data-producto]").forEach(boton => {
         boton.addEventListener("click", function () {
             const producto = {
@@ -73,59 +70,71 @@ fetch('../productos.json')
     const closeBtn = document.getElementById("close-btn");
     const btnEmpezar = document.getElementById("btn-empezar");
 
-    btnCarrito.onclick = function() {
-        modal.style.display = "block";
-        actualizarCarrito();
+    if (btnCarrito) {
+        btnCarrito.onclick = function() {
+            modal.style.display = "block";
+            actualizarCarrito();
+        };
     }
 
-    closeBtn.onclick = function() {
-        modal.style.display = "none";
+    if (closeBtn) {
+        closeBtn.onclick = function() {
+            modal.style.display = "none";
+        };
     }
 
     window.onclick = function(event) {
         if (event.target == modal) {
             modal.style.display = "none";
         }
-    }
+    };
 
     // Redirigir a otra página cuando se hace clic en "¡Empecemos!"
-    btnEmpezar.onclick = function() {
-        if (carrito.length === 0) {
-            alert("⚠️ No has seleccionado ningún servicio.");
-            return;
-        }
-        // Redirigir a la página de inicio de servicio o la que necesites
-        window.location.href = 'pagina-de-servicios.html';
+    if (btnEmpezar) {
+        btnEmpezar.onclick = function() {
+            if (carrito.length === 0) {
+                alert("⚠️ No has seleccionado ningún servicio.");
+                return;
+            }
+            
+            // Enviar productos seleccionados en una query string
+            const productosSeleccionados = carrito.map(p => encodeURIComponent(p.nombre)).join(",");
+            carrito = []; // Vaciar el carrito
+            localStorage.removeItem("carrito"); // Eliminar del localStorage
+            actualizarCarrito(); // Actualizar la vista
+            window.location.href = `pagina-de-servicios.html?productos=${productosSeleccionados}`;
+        };
     }
 
-    // Actualizar carrito al cargar la página
-    actualizarCarrito();
-});
+    // Botón para vaciar el carrito
+    const btnVaciar = document.getElementById("vaciar-btn");
+    if (btnVaciar) {
+        btnVaciar.onclick = function () {
+            carrito = []; // Vaciar el array del carrito
+            localStorage.removeItem("carrito"); // Eliminarlo del localStorage
+            actualizarCarrito(); // Actualizar la vista del carrito
+        };
+    }
 
-const btnVaciar = document.getElementById("vaciar-btn"); // Obtener el botón "Vaciar"
-
-btnVaciar.onclick = function () {
-    carrito = []; // Vaciar el array del carrito
-    localStorage.removeItem("carrito"); // Eliminarlo del localStorage
-    actualizarCarrito(); // Actualizar la vista del carrito
-};
-
-
-// Mostrar el listado de productos seleccionados en el formulario
-document.addEventListener("DOMContentLoaded", function () {
-    let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
+    // Mostrar el listado de productos seleccionados en el formulario
     const listaProductos = document.getElementById("productos-seleccionados");
 
     function actualizarListaProductos() {
-        listaProductos.innerHTML = ""; // Limpiar la lista antes de actualizar
-        carrito.forEach(producto => {
-            let item = document.createElement("li");
-            item.textContent = producto.nombre;
-            item.classList.add("list-group-item");
-            listaProductos.appendChild(item);
-        });
+        if (listaProductos) {
+            listaProductos.innerHTML = ""; // Limpiar la lista antes de actualizar
+            carrito.forEach(producto => {
+                let item = document.createElement("li");
+                item.textContent = producto.nombre;
+                item.classList.add("list-group-item");
+                listaProductos.appendChild(item);
+            });
+        }
     }
 
-    // Llamar a la función para actualizar la lista al cargar la página
-    actualizarListaProductos();
+    document.addEventListener("DOMContentLoaded", function () {
+        carrito = JSON.parse(localStorage.getItem("carrito")) || [];
+        actualizarListaProductos();
+    });
+
+    actualizarCarrito(); // Actualizar carrito al cargar la página
 });
