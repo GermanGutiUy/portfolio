@@ -124,7 +124,7 @@ fetch('../productos.json')
             carrito = [];
             localStorage.removeItem("carrito");
             actualizarCarrito();
-            window.location.href = 'pagina-de-servicios.html';
+            window.location.href = 'contact_con_carrito.html';
         };
     }
 
