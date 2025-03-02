@@ -1,5 +1,6 @@
 
 // Cargar el archivo JSON con los servicios
+// Cargar el archivo JSON con los servicios
 fetch('../productos.json')
   .then(response => {
     console.log('Response:', response);
@@ -7,7 +8,8 @@ fetch('../productos.json')
   })
   .then(productos => {
     console.log('Productos:', productos);  // Verifica los datos recibidos
-    const container = document.querySelector('servicios-container');
+    const container = document.querySelector('#servicios-container');  // Cambié 'servicios-container' por '#servicios-container'
+    
     productos.forEach(producto => {
       const productCard = `
         <div class="col-lg-11 col-xl-9 col-xxl-8">
@@ -29,6 +31,7 @@ fetch('../productos.json')
     });
   })
   .catch(error => console.error('Error al cargar los productos:', error));
+
 
 
 
