@@ -274,54 +274,101 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // Cierra el modal de carrito y abre el de contacto si hay productos
+    // Abre el modal de carrito
+    function abrirCarritoModal() {
+        carritoModal.style.display = "block";
+    }
+
+    // Cierra el modal de carrito
+    function cerrarCarritoModal() {
+        carritoModal.style.display = "none";
+    }
+
+    // Abre el modal de contacto
+    function abrirContactoModal() {
+        contactoModal.style.display = "block";
+    }
+
+    // Cierra el modal de contacto
+    function cerrarContactoModal() {
+        contactoModal.style.display = "none";
+    }
+
+    // Mostrar modal de contacto al hacer clic en ¡Empecemos! si el carrito no está vacío
     empezarBtn.addEventListener("click", function () {
         if (!carritoNoEstaVacio()) {
             alert("⚠️ El carrito está vacío. Agrega productos antes de continuar.");
         } else {
-            carritoModal.style.display = "none"; // Cierra el modal del carrito
-            contactoModal.style.display = "block"; // Abre el modal de contacto
+            cerrarCarritoModal();
+            abrirContactoModal();
             mostrarProductosSeleccionados(); // Mostrar productos cuando se abra el modal de contacto
         }
     });
 
-    // Cierra el modal de contacto
-    closeContactoBtn.addEventListener("click", function () {
-        contactoModal.style.display = "none";
-    });
+    // Cerrar el modal de carrito
+    closeCarritoBtn.addEventListener("click", cerrarCarritoModal);
 
-    // Cierra el modal de carrito
-    closeCarritoBtn.addEventListener("click", function () {
-        carritoModal.style.display = "none";
-    });
+    // Cerrar el modal de contacto
+    closeContactoBtn.addEventListener("click", cerrarContactoModal);
 
-    // Cierra los modales si se hace clic fuera de ellos
+    // Cerrar los modales si se hace clic fuera de ellos
     window.addEventListener("click", function (event) {
         if (event.target === contactoModal) {
-            contactoModal.style.display = "none";
+            cerrarContactoModal();
         }
         if (event.target === carritoModal) {
-            carritoModal.style.display = "none";
+            cerrarCarritoModal();
         }
     });
 
-    // Vaciar carrito después de enviar el formulario
+    // Validación del formulario antes de enviarlo
     contactForm.addEventListener("submit", function (event) {
         event.preventDefault(); // Evita el envío inmediato
 
-        alert("✅ Formulario enviado correctamente. Vaciando carrito...");
+        const inputs = contactForm.querySelectorAll('input');
+        let isValid = true;
 
-        // Vaciar el carrito visualmente
-        productosLista.innerHTML = ""; 
+        // Validar los campos del formulario (nombre, email, teléfono)
+        inputs.forEach(input => {
+            if (!input.checkValidity()) {
+                isValid = false;
+                input.classList.add('is-invalid'); // Agregar la clase para mostrar el error
+            } else {
+                input.classList.remove('is-invalid'); // Remover la clase si es válido
+            }
+        });
 
-        // Vaciar el carrito en el localStorage
-        localStorage.removeItem("carrito");
+        // Verificar si hay productos seleccionados
+        if (productosSeleccionados.children.length === 0) {
+            isValid = false;
+            alert("⚠️ Debes seleccionar al menos un producto antes de enviar el formulario.");
+        }
 
-        // También vaciar el carrito en la variable global
-        let carrito = [];
-        
-        // Cierra el modal de contacto
-        contactoModal.style.display = "none";
+        // Si todo es válido, enviar el formulario
+        if (isValid) {
+            alert("✅ Formulario enviado correctamente. Vaciando carrito...");
+
+            // Vaciar el carrito visualmente
+            productosLista.innerHTML = ""; 
+
+            // Vaciar el carrito en el localStorage
+            localStorage.removeItem("carrito");
+
+            // También vaciar el carrito en la variable global
+            let carrito = [];
+            
+            // Cierra el modal de contacto
+            cerrarContactoModal();
+
+            // Ahora el formulario se enviaría si todo es correcto
+            contactForm.submit();
+        } else {
+            alert("⚠️ El formulario no se ha enviado correctamente. Por favor, revisa los campos e intenta nuevamente.");
+        }
     });
+
+    // Si necesitas abrir el modal de carrito en algún otro momento
+    // Ejemplo: Abrir el modal de carrito al hacer clic en un botón o al agregar un producto al carrito
+    // abrirCarritoModal(); 
 });
 // Modal de Contacto
