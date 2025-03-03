@@ -164,15 +164,17 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
-//<!-- Modal de Contacto Verif -->
+// Modal de Contacto Verif
 document.getElementById('contactForm').addEventListener('submit', function(event) {
     event.preventDefault(); // Evitar el envío del formulario para validar primero
 
     const form = event.target;
     const inputs = form.querySelectorAll('input');
-    
+    const productosSeleccionados = document.getElementById("productos-seleccionados");
+
     let isValid = true;
 
+    // Validar los campos del formulario (nombre, email, teléfono)
     inputs.forEach(input => {
         if (!input.checkValidity()) {
             isValid = false;
@@ -182,14 +184,20 @@ document.getElementById('contactForm').addEventListener('submit', function(event
         }
     });
 
-    // Si el formulario es válido, puedes enviar el formulario
+    // Verificar si hay productos seleccionados
+    if (productosSeleccionados.children.length === 0) {
+        isValid = false;
+        alert("⚠️ Debes seleccionar al menos un producto antes de enviar el formulario.");
+    }
+
+    // Si todo es válido, enviar el formulario
     if (isValid) {
         form.submit();
     }
 });
-//<!-- Modal de Contacto Verif -->
+// Modal de Contacto Verif
 
-//<!-- Modal de Contacto -->
+// Modal de Contacto
 document.addEventListener("DOMContentLoaded", function () {
     const carritoModal = document.getElementById("carrito-modal");
     const contactoModal = document.getElementById("contacto-modal");
@@ -268,4 +276,4 @@ document.addEventListener("DOMContentLoaded", function () {
         contactoModal.style.display = "none";
     });
 });
-//<!-- Modal de Contacto -->
+// Modal de Contacto
