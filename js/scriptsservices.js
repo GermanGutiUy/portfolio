@@ -112,23 +112,6 @@ fetch('../productos.json')
         }
     };
 
-// Redirigir a otra página cuando se hace clic en "¡Empezamos!"
-if (btnEmpezar) {
-    btnEmpezar.onclick = function() {
-        if (carrito.length === 0) {
-            // Mostrar un error si el carrito está vacío
-            alert("⚠️ Para contactar por un servicio, se debe seleccionar un servicio.");
-            return; // Detener la redirección si el carrito está vacío
-        }
-
-        // Guardar el carrito en localStorage antes de redirigir
-        localStorage.setItem("carrito", JSON.stringify(carrito));
-
-        // Redirigir a la página de contacto
-        window.location.href = 'contact_con_carrito.html';
-    };
-}
-
     // Botón para vaciar el carrito
     const btnVaciar = document.getElementById("vaciar-btn");
     if (btnVaciar) {
