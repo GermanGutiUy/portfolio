@@ -165,6 +165,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 //<!-- Modal de Contacto -->
+//<!-- Modal de Contacto -->
 document.addEventListener("DOMContentLoaded", function () {
     const carritoModal = document.getElementById("carrito-modal");
     const contactoModal = document.getElementById("contacto-modal");
@@ -221,9 +222,12 @@ document.addEventListener("DOMContentLoaded", function () {
         // Vaciar el carrito en el localStorage
         localStorage.removeItem("carrito");
 
-        // También vaciar el carrito en la variable global
-        let carrito = [];
+        // También vaciar el carrito en la variable global (si la tienes)
+        let carrito = []; // Reemplazar si usas una variable global para el carrito
         
+        // Aquí también podrías asegurarte de que el carrito vacío no se recargue desde localStorage si es necesario
+        // localStorage.setItem('carrito', JSON.stringify(carrito)); // Si decides mantenerlo vacío en el almacenamiento
+
         // Cierra el modal de contacto
         contactoModal.style.display = "none";
     });
