@@ -172,12 +172,16 @@ document.addEventListener("DOMContentLoaded", function () {
     const closeCarritoBtn = document.getElementById("close-btn");
     const closeContactoBtn = document.getElementById("close-contacto-btn");
     const contactForm = document.getElementById("contactForm");
-    const productosLista = document.getElementById("productos-lista"); // Lista del carrito
-    let carrito = []; // Suponiendo que el carrito es un array en JS
+    const productosLista = document.getElementById("productos-lista"); // UL del carrito
 
-    // Cierra el modal de carrito y abre el de contacto
+    // Función para verificar si hay productos en el carrito
+    function carritoNoEstaVacio() {
+        return productosLista.children.length > 0; // Verifica si hay elementos en la lista
+    }
+
+    // Cierra el modal de carrito y abre el de contacto si hay productos
     empezarBtn.addEventListener("click", function () {
-        if (carrito.length === 0) {
+        if (!carritoNoEstaVacio()) {
             alert("⚠️ El carrito está vacío. Agrega productos antes de continuar.");
         } else {
             carritoModal.style.display = "none";
@@ -207,14 +211,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Vaciar carrito después de enviar el formulario
     contactForm.addEventListener("submit", function (event) {
-        event.preventDefault(); // Evita el envío inmediato para controlarlo manualmente
+        event.preventDefault(); // Evita el envío inmediato
 
-        // Simula un envío exitoso (puedes agregar AJAX aquí si es necesario)
         alert("✅ Formulario enviado correctamente. Vaciando carrito...");
 
-        // Vaciar el carrito
-        carrito = []; // Reinicia el array del carrito
-        productosLista.innerHTML = ""; // Borra los productos del modal de carrito
+        // Vaciar visualmente el carrito
+        productosLista.innerHTML = ""; 
 
         // Cierra el modal de contacto
         contactoModal.style.display = "none";
