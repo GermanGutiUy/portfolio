@@ -127,29 +127,5 @@
         <!-- Core theme JS-->
         <script src="js/scriptsservices.js"></script>
         <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
-
-        <script>
-            // JavaScript para abrir y cerrar el modal
-            const carritoBtn = document.getElementById('carrito-btn');
-            const carritoModal = document.getElementById('carrito-modal');
-            const closeBtn = document.getElementById('close-btn');
-
-            // Función para abrir el modal
-            carritoBtn.addEventListener('click', () => {
-                carritoModal.style.display = 'block';
-            });
-
-            // Función para cerrar el modal
-            closeBtn.addEventListener('click', () => {
-                carritoModal.style.display = 'none';
-            });
-
-            // Cerrar el modal si se hace clic fuera de él
-            window.addEventListener('click', (event) => {
-                if (event.target === carritoModal) {
-                    carritoModal.style.display = 'none';
-                }
-            });
-        </script>
     </body>
 </html>

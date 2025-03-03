@@ -166,3 +166,39 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 });
+
+//<!-- Modal de Contacto -->
+document.addEventListener("DOMContentLoaded", function () {
+    const carritoModal = document.getElementById("carrito-modal");
+    const contactoModal = document.getElementById("contacto-modal");
+    const empezarBtn = document.getElementById("btn-empezar");
+    const closeCarritoBtn = document.getElementById("close-btn");
+    const closeContactoBtn = document.getElementById("close-contacto-btn");
+
+    // Cierra el modal de carrito y abre el de contacto
+    empezarBtn.addEventListener("click", function () {
+        carritoModal.style.display = "none";
+        contactoModal.style.display = "block";
+    });
+
+    // Cierra el modal de contacto
+    closeContactoBtn.addEventListener("click", function () {
+        contactoModal.style.display = "none";
+    });
+
+    // Cierra el modal de carrito
+    closeCarritoBtn.addEventListener("click", function () {
+        carritoModal.style.display = "none";
+    });
+
+    // Cierra los modales si se hace clic fuera de ellos
+    window.addEventListener("click", function (event) {
+        if (event.target === contactoModal) {
+            contactoModal.style.display = "none";
+        }
+        if (event.target === carritoModal) {
+            carritoModal.style.display = "none";
+        }
+    });
+});
+//<!-- Modal de Contacto -->
