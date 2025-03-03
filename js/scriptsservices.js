@@ -164,6 +164,39 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
+// Modal de Contacto Verif
+document.getElementById('contactForm').addEventListener('submit', function(event) {
+    event.preventDefault(); // Evitar el envío del formulario para validar primero
+
+    const form = event.target;
+    const inputs = form.querySelectorAll('input');
+    const productosSeleccionados = document.getElementById("productos-seleccionados");
+
+    let isValid = true;
+
+    // Validar los campos del formulario (nombre, email, teléfono)
+    inputs.forEach(input => {
+        if (!input.checkValidity()) {
+            isValid = false;
+            input.classList.add('is-invalid'); // Agregar la clase para mostrar el error
+        } else {
+            input.classList.remove('is-invalid'); // Remover la clase si es válido
+        }
+    });
+
+    // Verificar si hay productos seleccionados
+    if (productosSeleccionados.children.length === 0) {
+        isValid = false;
+        alert("⚠️ Debes seleccionar al menos un producto antes de enviar el formulario.");
+    }
+
+    // Si todo es válido, enviar el formulario
+    if (isValid) {
+        form.submit();
+    }
+});
+// Modal de Contacto Verif
+
 // Modal de Contacto
 document.getElementById('contactForm').addEventListener('submit', function(event) {
     event.preventDefault(); // Evitar el envío del formulario para validar primero
@@ -171,19 +204,14 @@ document.getElementById('contactForm').addEventListener('submit', function(event
     const form = event.target;
     const inputs = form.querySelectorAll('input');
     const productosSeleccionados = document.getElementById("productos-seleccionados");
-    const errorMsg = document.getElementById("error-msg"); // Elemento donde se mostrará el error global
-    let isValid = true;
 
-    // Limpiar mensaje de error previo
-    errorMsg.textContent = "";
-    errorMsg.classList.remove("is-invalid");
+    let isValid = true;
 
     // Validar los campos del formulario (nombre, email, teléfono)
     inputs.forEach(input => {
         if (!input.checkValidity()) {
             isValid = false;
             input.classList.add('is-invalid'); // Agregar la clase para mostrar el error
-            mostrarError(input); // Mostrar error individual
         } else {
             input.classList.remove('is-invalid'); // Remover la clase si es válido
         }
@@ -195,7 +223,6 @@ document.getElementById('contactForm').addEventListener('submit', function(event
     if (!emailRegex.test(email)) {
         isValid = false;
         document.getElementById("email").classList.add('is-invalid');
-        mostrarError(document.getElementById("email"), "El correo electrónico no tiene el formato correcto.");
     }
 
     // Verificar si hay productos seleccionados
@@ -208,22 +235,8 @@ document.getElementById('contactForm').addEventListener('submit', function(event
     if (isValid) {
         form.submit();
         vaciarCarrito(); // Llamar a la función para vaciar el carrito
-    } else {
-        // Mostrar mensaje de error global
-        errorMsg.textContent = "⚠️ Formulario con error, revisar los campos.";
-        errorMsg.classList.add("is-invalid");
     }
 });
-
-// Función para mostrar los errores específicos por campo
-function mostrarError(input, mensaje = "") {
-    const errorDiv = input.nextElementSibling;
-    if (mensaje) {
-        errorDiv.textContent = mensaje; // Si hay un mensaje personalizado (como el de email)
-    } else {
-        errorDiv.textContent = "Este campo es obligatorio"; // Mensaje predeterminado
-    }
-}
 
 // Vaciar carrito después de enviar el formulario
 function vaciarCarrito() {
@@ -238,5 +251,8 @@ function vaciarCarrito() {
 
     // También vaciar el carrito en la variable global
     let carrito = [];
+
+    // Aquí también puedes actualizar la UI del carrito si lo deseas
+    // Por ejemplo: mostrar que el carrito está vacío
 }
 // Modal de Contacto
