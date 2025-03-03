@@ -195,8 +195,6 @@ document.getElementById('contactForm').addEventListener('submit', function(event
         form.submit();
     }
 });
-// Modal de Contacto Verif
-
 // Modal de Contacto
 document.getElementById('contactForm').addEventListener('submit', function(event) {
     event.preventDefault(); // Evitar el envío del formulario para validar primero
@@ -251,8 +249,5 @@ function vaciarCarrito() {
 
     // También vaciar el carrito en la variable global
     let carrito = [];
-
-    // Aquí también puedes actualizar la UI del carrito si lo deseas
-    // Por ejemplo: mostrar que el carrito está vacío
 }
 // Modal de Contacto
