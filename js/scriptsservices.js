@@ -165,7 +165,6 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 //<!-- Modal de Contacto -->
-//<!-- Modal de Contacto -->
 document.addEventListener("DOMContentLoaded", function () {
     const carritoModal = document.getElementById("carrito-modal");
     const contactoModal = document.getElementById("contacto-modal");
@@ -174,10 +173,24 @@ document.addEventListener("DOMContentLoaded", function () {
     const closeContactoBtn = document.getElementById("close-contacto-btn");
     const contactForm = document.getElementById("contactForm");
     const productosLista = document.getElementById("productos-lista"); // UL del carrito
+    const productosSeleccionados = document.getElementById("productos-seleccionados"); // UL en el formulario
 
     // Función para verificar si hay productos en el carrito
     function carritoNoEstaVacio() {
         return productosLista.children.length > 0; // Verifica si hay elementos en la lista
+    }
+
+    // Función para mostrar los productos en el modal de contacto
+    function mostrarProductosSeleccionados() {
+        const carrito = JSON.parse(localStorage.getItem("carrito")) || []; // Obtener el carrito desde el localStorage
+        productosSeleccionados.innerHTML = ""; // Limpiar la lista antes de agregar nuevos productos
+
+        carrito.forEach(producto => {
+            const li = document.createElement("li");
+            li.classList.add("list-group-item");
+            li.textContent = producto.nombre; // Asume que cada producto tiene un atributo 'nombre'
+            productosSeleccionados.appendChild(li);
+        });
     }
 
     // Cierra el modal de carrito y abre el de contacto si hay productos
@@ -187,6 +200,7 @@ document.addEventListener("DOMContentLoaded", function () {
         } else {
             carritoModal.style.display = "none";
             contactoModal.style.display = "block";
+            mostrarProductosSeleccionados(); // Mostrar productos cuando se abra el modal de contacto
         }
     });
 
@@ -225,9 +239,6 @@ document.addEventListener("DOMContentLoaded", function () {
         // También vaciar el carrito en la variable global (si la tienes)
         let carrito = []; // Reemplazar si usas una variable global para el carrito
         
-        // Aquí también podrías asegurarte de que el carrito vacío no se recargue desde localStorage si es necesario
-        // localStorage.setItem('carrito', JSON.stringify(carrito)); // Si decides mantenerlo vacío en el almacenamiento
-
         // Cierra el modal de contacto
         contactoModal.style.display = "none";
     });
