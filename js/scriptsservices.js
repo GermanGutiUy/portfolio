@@ -171,11 +171,18 @@ document.addEventListener("DOMContentLoaded", function () {
     const empezarBtn = document.getElementById("btn-empezar");
     const closeCarritoBtn = document.getElementById("close-btn");
     const closeContactoBtn = document.getElementById("close-contacto-btn");
+    const contactForm = document.getElementById("contactForm");
+    const productosLista = document.getElementById("productos-lista"); // Lista del carrito
+    let carrito = []; // Suponiendo que el carrito es un array en JS
 
     // Cierra el modal de carrito y abre el de contacto
     empezarBtn.addEventListener("click", function () {
-        carritoModal.style.display = "none";
-        contactoModal.style.display = "block";
+        if (carrito.length === 0) {
+            alert("⚠️ El carrito está vacío. Agrega productos antes de continuar.");
+        } else {
+            carritoModal.style.display = "none";
+            contactoModal.style.display = "block";
+        }
     });
 
     // Cierra el modal de contacto
@@ -196,6 +203,21 @@ document.addEventListener("DOMContentLoaded", function () {
         if (event.target === carritoModal) {
             carritoModal.style.display = "none";
         }
+    });
+
+    // Vaciar carrito después de enviar el formulario
+    contactForm.addEventListener("submit", function (event) {
+        event.preventDefault(); // Evita el envío inmediato para controlarlo manualmente
+
+        // Simula un envío exitoso (puedes agregar AJAX aquí si es necesario)
+        alert("✅ Formulario enviado correctamente. Vaciando carrito...");
+
+        // Vaciar el carrito
+        carrito = []; // Reinicia el array del carrito
+        productosLista.innerHTML = ""; // Borra los productos del modal de carrito
+
+        // Cierra el modal de contacto
+        contactoModal.style.display = "none";
     });
 });
 //<!-- Modal de Contacto -->
