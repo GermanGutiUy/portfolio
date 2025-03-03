@@ -53,7 +53,6 @@ fetch('../productos.json')
         });
     }
 
-    // Asegurar que la lista de productos aparezca correctamente al abrir el modal
     document.getElementById("btn-empezar").addEventListener("click", function () {
         actualizarListaProductos(); // Actualiza la lista de productos antes de mostrar el modal
     });
@@ -65,7 +64,7 @@ fetch('../productos.json')
         const listaProductos = document.getElementById("productos-lista");
         if (!listaProductos) return; // Evitar errores si el elemento no existe
         
-        listaProductos.innerHTML = ""; // Limpiar la lista antes de agregar los productos
+        listaProductos.innerHTML = "";
 
         carrito.forEach(producto => {
             let item = document.createElement("li");
@@ -73,13 +72,11 @@ fetch('../productos.json')
             listaProductos.appendChild(item);
         });
 
-        // También actualizamos la vista de productos seleccionados en el formulario
         actualizarListaProductos();
     }
 
     // Función para agregar productos al carrito
     function manejarProducto(producto) {
-        // Evitar duplicados
         const index = carrito.findIndex(item => item.id === producto.id);
         if (index === -1) {
             carrito.push(producto);
@@ -136,7 +133,6 @@ fetch('../productos.json')
         };
     }
 
-    // Actualizar carrito al cargar la página
     actualizarCarrito();
 });
 
@@ -166,7 +162,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // Modal de Contacto Verif
 document.getElementById('contactForm').addEventListener('submit', function(event) {
-    event.preventDefault(); // Evitar el envío del formulario para validar primero
+    event.preventDefault(); 
 
     const form = event.target;
     const inputs = form.querySelectorAll('input');
@@ -178,9 +174,9 @@ document.getElementById('contactForm').addEventListener('submit', function(event
     inputs.forEach(input => {
         if (!input.checkValidity()) {
             isValid = false;
-            input.classList.add('is-invalid'); // Agregar la clase para mostrar el error
+            input.classList.add('is-invalid');
         } else {
-            input.classList.remove('is-invalid'); // Remover la clase si es válido
+            input.classList.remove('is-invalid');
         }
     });
 
@@ -198,7 +194,7 @@ document.getElementById('contactForm').addEventListener('submit', function(event
 
 // Modal de Contacto Verif
 document.getElementById('contactForm').addEventListener('submit', function(event) {
-    event.preventDefault(); // Evitar el envío del formulario para validar primero
+    event.preventDefault();
 
     const form = event.target;
     const inputs = form.querySelectorAll('input');
@@ -210,9 +206,9 @@ document.getElementById('contactForm').addEventListener('submit', function(event
     inputs.forEach(input => {
         if (!input.checkValidity()) {
             isValid = false;
-            input.classList.add('is-invalid'); // Agregar la clase para mostrar el error
+            input.classList.add('is-invalid');
         } else {
-            input.classList.remove('is-invalid'); // Remover la clase si es válido
+            input.classList.remove('is-invalid');
         }
     });
 
@@ -232,7 +228,7 @@ document.getElementById('contactForm').addEventListener('submit', function(event
         // Vaciar el carrito en el localStorage
         localStorage.removeItem("carrito");
 
-        // También vaciar el carrito en la variable global
+        // vaciar el carrito en la variable global
         let carrito = [];
         
         // Cierra el modal de contacto
@@ -258,13 +254,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Función para verificar si hay productos en el carrito
     function carritoNoEstaVacio() {
-        return productosLista.children.length > 0; // Verifica si hay elementos en la lista
+        return productosLista.children.length > 0;
     }
 
     // Función para mostrar los productos en el modal de contacto
     function mostrarProductosSeleccionados() {
         const carrito = JSON.parse(localStorage.getItem("carrito")) || []; // Obtener el carrito desde el localStorage
-        productosSeleccionados.innerHTML = ""; // Limpiar la lista antes de agregar nuevos productos
+        productosSeleccionados.innerHTML = "";
 
         carrito.forEach(producto => {
             const li = document.createElement("li");
@@ -367,9 +363,5 @@ document.addEventListener("DOMContentLoaded", function () {
             alert("⚠️ El formulario no se ha enviado correctamente. Por favor, revisa los campos e intenta nuevamente.");
         }
     });
-
-    // Si necesitas abrir el modal de carrito en algún otro momento
-    // Ejemplo: Abrir el modal de carrito al hacer clic en un botón o al agregar un producto al carrito
-    // abrirCarritoModal(); 
 });
 // Modal de Contacto
