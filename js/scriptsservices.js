@@ -164,6 +164,31 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
+//<!-- Modal de Contacto Verif -->
+document.getElementById('contactForm').addEventListener('submit', function(event) {
+    event.preventDefault(); // Evitar el envío del formulario para validar primero
+
+    const form = event.target;
+    const inputs = form.querySelectorAll('input');
+    
+    let isValid = true;
+
+    inputs.forEach(input => {
+        if (!input.checkValidity()) {
+            isValid = false;
+            input.classList.add('is-invalid'); // Agregar la clase para mostrar el error
+        } else {
+            input.classList.remove('is-invalid'); // Remover la clase si es válido
+        }
+    });
+
+    // Si el formulario es válido, puedes enviar el formulario
+    if (isValid) {
+        form.submit();
+    }
+});
+//<!-- Modal de Contacto Verif -->
+
 //<!-- Modal de Contacto -->
 document.addEventListener("DOMContentLoaded", function () {
     const carritoModal = document.getElementById("carrito-modal");
