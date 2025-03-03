@@ -323,7 +323,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Validación del formulario antes de enviarlo
     contactForm.addEventListener("submit", function (event) {
-        event.preventDefault(); // Evita el envío inmediato
+        event.preventDefault(); // Evita el envío inmediato del formulario
 
         const inputs = contactForm.querySelectorAll('input');
         let isValid = true;
@@ -360,9 +360,10 @@ document.addEventListener("DOMContentLoaded", function () {
             // Cierra el modal de contacto
             cerrarContactoModal();
 
-            // Ahora el formulario se enviaría si todo es correcto
+            // Enviar el formulario después de todo el proceso
             contactForm.submit();
         } else {
+            // Si la validación no pasa, mostrar un mensaje
             alert("⚠️ El formulario no se ha enviado correctamente. Por favor, revisa los campos e intenta nuevamente.");
         }
     });
