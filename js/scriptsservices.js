@@ -155,9 +155,6 @@ document.addEventListener("DOMContentLoaded", function () {
     let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
 
     if (carrito.length === 0) {
-        alert("⚠️ No hay servicios seleccionados.");
-    } else {
-        // Mostrar los servicios en la lista
         const listaServicios = document.getElementById("productos-seleccionados");
         if (!listaServicios) return;
 
