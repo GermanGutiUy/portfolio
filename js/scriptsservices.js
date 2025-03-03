@@ -203,12 +203,8 @@ document.getElementById('contactForm').addEventListener('submit', function(event
     const form = event.target;
     const inputs = form.querySelectorAll('input');
     const productosSeleccionados = document.getElementById("productos-seleccionados");
-    const errorMessage = document.getElementById("error-message"); // Mensaje de error
 
     let isValid = true;
-
-    // Limpiar cualquier mensaje de error anterior
-    errorMessage.style.display = "none";
 
     // Validar los campos del formulario (nombre, email, teléfono)
     inputs.forEach(input => {
@@ -229,10 +225,6 @@ document.getElementById('contactForm').addEventListener('submit', function(event
     // Si todo es válido, enviar el formulario
     if (isValid) {
         form.submit();
-    } else {
-        // Mostrar mensaje de error si el formulario no es válido
-        errorMessage.style.display = "block";
-        errorMessage.textContent = "❌ Error al completar el formulario, intente nuevamente.";
     }
 });
 // Modal de Contacto Verif
@@ -247,13 +239,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const contactForm = document.getElementById("contactForm");
     const productosLista = document.getElementById("productos-lista"); // UL del carrito
     const productosSeleccionados = document.getElementById("productos-seleccionados"); // UL en el formulario
-    const errorMessage = document.createElement("div");
-    errorMessage.id = "error-message";
-    errorMessage.style.color = "red";
-    errorMessage.style.display = "none"; // Inicialmente oculto
-
-    // Agregar el mensaje de error al modal de contacto
-    contactoModal.querySelector(".modal-content").insertBefore(errorMessage, contactForm);
 
     // Función para verificar si hay productos en el carrito
     function carritoNoEstaVacio() {
@@ -308,7 +293,6 @@ document.addEventListener("DOMContentLoaded", function () {
     contactForm.addEventListener("submit", function (event) {
         event.preventDefault(); // Evita el envío inmediato
 
-        // Si la validación pasó correctamente, vaciar el carrito
         alert("✅ Formulario enviado correctamente. Vaciando carrito...");
 
         // Vaciar visualmente el carrito
