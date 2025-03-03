@@ -34,9 +34,17 @@ fetch('../productos.json')
     function actualizarListaProductos() {
         const listaProductos = document.getElementById("productos-seleccionados");
         if (!listaProductos) return;
-    
+
         listaProductos.innerHTML = ""; // Limpiamos la lista antes de agregar los productos
-    
+
+        if (carrito.length === 0) {
+            let mensajeVacio = document.createElement("li");
+            mensajeVacio.textContent = "El carrito está vacío";
+            mensajeVacio.classList.add("list-group-item", "text-muted");
+            listaProductos.appendChild(mensajeVacio);
+            return;
+        }
+
         carrito.forEach(producto => {
             let item = document.createElement("li");
             item.textContent = producto.nombre;
@@ -44,8 +52,8 @@ fetch('../productos.json')
             listaProductos.appendChild(item);
         });
     }
-    
-    // Asegurar que la lista de productos aparezca cuando se abre el modal de contacto
+
+    // Asegurar que la lista de productos aparezca correctamente al abrir el modal
     document.getElementById("btn-empezar").addEventListener("click", function () {
         actualizarListaProductos(); // Actualiza la lista de productos antes de mostrar el modal
     });
