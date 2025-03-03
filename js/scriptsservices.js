@@ -1,8 +1,8 @@
-// Cargar el archivo JSON con los productos
+// Cargar el archivo JSON con los servicios
 fetch('../productos.json')
   .then(response => response.json())
   .then(productos => {
-    const container = document.querySelector('#servicios-container');
+    const container = document.querySelector('#servicios-container'); // Contenedor para los servicios
     
     productos.forEach(producto => {
       const productCard = `
@@ -27,8 +27,10 @@ fetch('../productos.json')
       container.innerHTML += productCard;
     });
 
+    // Obtener el carrito desde localStorage
     let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
 
+    // Función para actualizar la lista de productos en el carrito
     function actualizarListaProductos() {
         const listaProductos = document.getElementById("productos-seleccionados");
         if (!listaProductos) return;
@@ -47,32 +49,40 @@ fetch('../productos.json')
     document.getElementById("btn-empezar").addEventListener("click", function () {
         actualizarListaProductos(); // Actualiza la lista de productos antes de mostrar el modal
     });
-    
 
+    // Función para actualizar el carrito en el almacenamiento local y en la vista
     function actualizarCarrito() {
         localStorage.setItem("carrito", JSON.stringify(carrito));
 
         const listaProductos = document.getElementById("productos-lista");
-        if (!listaProductos) return;
+        if (!listaProductos) return; // Evitar errores si el elemento no existe
         
-        listaProductos.innerHTML = "";
+        listaProductos.innerHTML = ""; // Limpiar la lista antes de agregar los productos
+
         carrito.forEach(producto => {
             let item = document.createElement("li");
-            item.textContent = producto.nombre;
+            item.textContent = producto.nombre; // Solo el nombre del servicio
             listaProductos.appendChild(item);
         });
 
+        // También actualizamos la vista de productos seleccionados en el formulario
         actualizarListaProductos();
     }
 
+    // Función para agregar productos al carrito
     function manejarProducto(producto) {
+        // Evitar duplicados
         const index = carrito.findIndex(item => item.id === producto.id);
         if (index === -1) {
             carrito.push(producto);
+            alert(`✅ El servicio de ${producto.nombre} ha sido añadido al carrito.`);
+        } else {
+            alert(`✅ El servicio de ${producto.nombre} ya está en el carrito.`);
         }
         actualizarCarrito();
     }
 
+    // Asociar los eventos de los botones de "Añadir al Carrito"
     document.querySelectorAll("button[data-producto]").forEach(boton => {
         boton.addEventListener("click", function () {
             const producto = {
@@ -83,6 +93,7 @@ fetch('../productos.json')
         });
     });
 
+    // Mostrar el carrito en un modal
     const modal = document.getElementById("carrito-modal");
     const btnCarrito = document.getElementById("carrito-btn");
     const closeBtn = document.getElementById("close-btn");
@@ -107,24 +118,45 @@ fetch('../productos.json')
         }
     };
 
+    // Botón para vaciar el carrito
     const btnVaciar = document.getElementById("vaciar-btn");
     if (btnVaciar) {
         btnVaciar.onclick = function () {
-            carrito = [];
-            localStorage.removeItem("carrito");
-            actualizarCarrito();
+            carrito = []; // Vaciar el array del carrito
+            localStorage.removeItem("carrito"); // Eliminarlo del localStorage
+            actualizarCarrito(); // Actualizar la vista del carrito
         };
     }
 
+    // Actualizar carrito al cargar la página
     actualizarCarrito();
 });
 
-// Mostrar productos seleccionados en el formulario al cargar la página
+// Mostrar el listado de productos seleccionados en el formulario al cargar la página
 document.addEventListener("DOMContentLoaded", function () {
+    let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
     actualizarListaProductos();
 });
 
-// Manejo del modal de contacto
+// Al cargar la página de contacto
+document.addEventListener("DOMContentLoaded", function () {
+    // Recuperar el carrito del localStorage
+    let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
+
+    if (carrito.length === 0) {
+        const listaServicios = document.getElementById("productos-seleccionados");
+        if (!listaServicios) return;
+
+        carrito.forEach(producto => {
+            let item = document.createElement("li");
+            item.textContent = producto.nombre;
+            item.classList.add("list-group-item");
+            listaServicios.appendChild(item);
+        });
+    }
+});
+
+//<!-- Modal de Contacto -->
 document.addEventListener("DOMContentLoaded", function () {
     const carritoModal = document.getElementById("carrito-modal");
     const contactoModal = document.getElementById("contacto-modal");
@@ -132,20 +164,23 @@ document.addEventListener("DOMContentLoaded", function () {
     const closeCarritoBtn = document.getElementById("close-btn");
     const closeContactoBtn = document.getElementById("close-contacto-btn");
 
+    // Cierra el modal de carrito y abre el de contacto
     empezarBtn.addEventListener("click", function () {
         carritoModal.style.display = "none";
         contactoModal.style.display = "block";
-        actualizarListaProductos();
     });
 
+    // Cierra el modal de contacto
     closeContactoBtn.addEventListener("click", function () {
         contactoModal.style.display = "none";
     });
 
+    // Cierra el modal de carrito
     closeCarritoBtn.addEventListener("click", function () {
         carritoModal.style.display = "none";
     });
 
+    // Cierra los modales si se hace clic fuera de ellos
     window.addEventListener("click", function (event) {
         if (event.target === contactoModal) {
             contactoModal.style.display = "none";
@@ -155,3 +190,4 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 });
+//<!-- Modal de Contacto -->
