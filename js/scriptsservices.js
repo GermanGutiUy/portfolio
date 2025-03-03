@@ -195,7 +195,7 @@ document.getElementById('contactForm').addEventListener('submit', function(event
         form.submit();
     }
 });
-// Modal de Contacto
+// Modal de Contacto Verif
 document.getElementById('contactForm').addEventListener('submit', function(event) {
     event.preventDefault(); // Evitar el envío del formulario para validar primero
 
@@ -215,39 +215,96 @@ document.getElementById('contactForm').addEventListener('submit', function(event
         }
     });
 
-    // Validar que el email tenga el formato correcto (ya está parcialmente validado por HTML, pero vamos a agregar más control)
-    const email = document.getElementById("email").value;
-    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-    if (!emailRegex.test(email)) {
-        isValid = false;
-        document.getElementById("email").classList.add('is-invalid');
-    }
-
     // Verificar si hay productos seleccionados
     if (productosSeleccionados.children.length === 0) {
         isValid = false;
         alert("⚠️ Debes seleccionar al menos un producto antes de enviar el formulario.");
     }
 
-    // Si todo es válido, enviar el formulario y vaciar el carrito
+    // Si todo es válido, enviar el formulario
     if (isValid) {
         form.submit();
-        vaciarCarrito(); // Llamar a la función para vaciar el carrito
     }
 });
+// Modal de Contacto Verif
 
-// Vaciar carrito después de enviar el formulario
-function vaciarCarrito() {
-    alert("✅ Formulario enviado correctamente. Vaciando carrito...");
+// Modal de Contacto
+document.addEventListener("DOMContentLoaded", function () {
+    const carritoModal = document.getElementById("carrito-modal");
+    const contactoModal = document.getElementById("contacto-modal");
+    const empezarBtn = document.getElementById("btn-empezar");
+    const closeCarritoBtn = document.getElementById("close-btn");
+    const closeContactoBtn = document.getElementById("close-contacto-btn");
+    const contactForm = document.getElementById("contactForm");
+    const productosLista = document.getElementById("productos-lista"); // UL del carrito
+    const productosSeleccionados = document.getElementById("productos-seleccionados"); // UL en el formulario
 
-    // Vaciar visualmente el carrito
-    const productosLista = document.getElementById("productos-lista");
-    productosLista.innerHTML = ""; 
+    // Función para verificar si hay productos en el carrito
+    function carritoNoEstaVacio() {
+        return productosLista.children.length > 0; // Verifica si hay elementos en la lista
+    }
 
-    // Vaciar el carrito en el localStorage
-    localStorage.removeItem("carrito");
+    // Función para mostrar los productos en el modal de contacto
+    function mostrarProductosSeleccionados() {
+        const carrito = JSON.parse(localStorage.getItem("carrito")) || []; // Obtener el carrito desde el localStorage
+        productosSeleccionados.innerHTML = ""; // Limpiar la lista antes de agregar nuevos productos
 
-    // También vaciar el carrito en la variable global
-    let carrito = [];
-}
+        carrito.forEach(producto => {
+            const li = document.createElement("li");
+            li.classList.add("list-group-item");
+            li.textContent = producto.nombre; // Asume que cada producto tiene un atributo 'nombre'
+            productosSeleccionados.appendChild(li);
+        });
+    }
+
+    // Cierra el modal de carrito y abre el de contacto si hay productos
+    empezarBtn.addEventListener("click", function () {
+        if (!carritoNoEstaVacio()) {
+            alert("⚠️ El carrito está vacío. Agrega productos antes de continuar.");
+        } else {
+            carritoModal.style.display = "none"; // Cierra el modal del carrito
+            contactoModal.style.display = "block"; // Abre el modal de contacto
+            mostrarProductosSeleccionados(); // Mostrar productos cuando se abra el modal de contacto
+        }
+    });
+
+    // Cierra el modal de contacto
+    closeContactoBtn.addEventListener("click", function () {
+        contactoModal.style.display = "none";
+    });
+
+    // Cierra el modal de carrito
+    closeCarritoBtn.addEventListener("click", function () {
+        carritoModal.style.display = "none";
+    });
+
+    // Cierra los modales si se hace clic fuera de ellos
+    window.addEventListener("click", function (event) {
+        if (event.target === contactoModal) {
+            contactoModal.style.display = "none";
+        }
+        if (event.target === carritoModal) {
+            carritoModal.style.display = "none";
+        }
+    });
+
+    // Vaciar carrito después de enviar el formulario
+    contactForm.addEventListener("submit", function (event) {
+        event.preventDefault(); // Evita el envío inmediato
+
+        alert("✅ Formulario enviado correctamente. Vaciando carrito...");
+
+        // Vaciar visualmente el carrito
+        productosLista.innerHTML = ""; 
+
+        // Vaciar el carrito en el localStorage
+        localStorage.removeItem("carrito");
+
+        // También vaciar el carrito en la variable global
+        let carrito = [];
+        
+        // Cierra el modal de contacto
+        contactoModal.style.display = "none";
+    });
+});
 // Modal de Contacto
