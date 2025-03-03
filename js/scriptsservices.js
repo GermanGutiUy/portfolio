@@ -224,7 +224,23 @@ document.getElementById('contactForm').addEventListener('submit', function(event
 
     // Si todo es válido, enviar el formulario
     if (isValid) {
-        form.submit();
+        alert("✅ Formulario enviado correctamente. Vaciando carrito...");
+
+        // Vaciar el carrito visualmente
+        productosLista.innerHTML = ""; 
+
+        // Vaciar el carrito en el localStorage
+        localStorage.removeItem("carrito");
+
+        // También vaciar el carrito en la variable global
+        let carrito = [];
+        
+        // Cierra el modal de contacto
+        contactoModal.style.display = "none";
+        
+        form.submit(); // Ahora se envía el formulario
+    } else {
+        alert("⚠️ El formulario no se ha enviado correctamente. Por favor, revisa los campos e intenta nuevamente.");
     }
 });
 // Modal de Contacto Verif
@@ -295,7 +311,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         alert("✅ Formulario enviado correctamente. Vaciando carrito...");
 
-        // Vaciar visualmente el carrito
+        // Vaciar el carrito visualmente
         productosLista.innerHTML = ""; 
 
         // Vaciar el carrito en el localStorage
