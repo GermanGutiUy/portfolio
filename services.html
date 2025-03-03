@@ -60,32 +60,34 @@
                             <span id="close-contacto-btn" class="close">&times;</span>
                             <h2>Contacto</h2>
                             <p>Completa el formulario para ponerme en contacto contigo.</p>
-                            <form id="contactForm" data-sb-form-api-token="API_TOKEN" novalidate>
-                                <!-- Name input-->
-                                <div class="form-floating mb-3">
-                                    <input class="form-control" id="name" type="text" placeholder="Enter your name..." required />
-                                    <label for="name">Nombre completo</label>
-                                    <div class="invalid-feedback">Se requiere un nombre.</div>
-                                </div>
-                                <!-- Email address input-->
-                                <div class="form-floating mb-3">
-                                    <input class="form-control" id="email" type="email" placeholder="name@example.com" required />
-                                    <label for="email">Email</label>
-                                    <div class="invalid-feedback">Se requiere Email.</div>
-                                    <div class="invalid-feedback">Email no válido.</div>
-                                </div>
-                                <!-- Phone number input-->
-                                <div class="form-floating mb-3">
-                                    <input class="form-control" id="phone" type="tel" placeholder="(123) 456-7890" required />
-                                    <label for="phone">Número de teléfono</label>
-                                    <div class="invalid-feedback">Número de teléfono requerido.</div>
-                                </div>
-                                <div class="mb-3">
-                                    <label class="form-label">Productos seleccionados</label>
-                                    <ul id="productos-seleccionados" class="list-group"></ul>
-                                </div>
-                                <button type="submit" class="btn btn-primary">Enviar</button>
-                            </form>                            
+                            <div id="error-msg" class="invalid-feedback">
+                                <form id="contactForm" data-sb-form-api-token="API_TOKEN" novalidate>
+                                    <!-- Name input-->
+                                    <div class="form-floating mb-3">
+                                        <input class="form-control" id="name" type="text" placeholder="Enter your name..." required />
+                                        <label for="name">Nombre completo</label>
+                                        <div class="invalid-feedback">Se requiere un nombre.</div>
+                                    </div>
+                                    <!-- Email address input-->
+                                    <div class="form-floating mb-3">
+                                        <input class="form-control" id="email" type="email" placeholder="name@example.com" required />
+                                        <label for="email">Email</label>
+                                        <div class="invalid-feedback">Se requiere Email.</div>
+                                        <div class="invalid-feedback">Email no válido.</div>
+                                    </div>
+                                    <!-- Phone number input-->
+                                    <div class="form-floating mb-3">
+                                        <input class="form-control" id="phone" type="tel" placeholder="(123) 456-7890" required />
+                                        <label for="phone">Número de teléfono</label>
+                                        <div class="invalid-feedback">Número de teléfono requerido.</div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Productos seleccionados</label>
+                                        <ul id="productos-seleccionados" class="list-group"></ul>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Enviar</button>
+                                </form>
+                            </div>                           
                         </div>
                     </div>
                     <!-- Modal de Contacto -->
