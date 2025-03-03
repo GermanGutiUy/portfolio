@@ -90,6 +90,16 @@ fetch('../productos.json')
         actualizarCarrito();
     }
 
+    // Modificar evento del botón "¡Empecemos!"
+    empezarBtn.addEventListener("click", function () {
+        if (carrito.length === 0) {
+            alert("⚠️ El carrito está vacío. Agrega productos antes de continuar.");
+        } else {
+            carritoModal.style.display = "none";
+            contactoModal.style.display = "block";
+        }
+    });
+
     // Asociar los eventos de los botones de "Añadir al Carrito"
     document.querySelectorAll("button[data-producto]").forEach(boton => {
         boton.addEventListener("click", function () {
