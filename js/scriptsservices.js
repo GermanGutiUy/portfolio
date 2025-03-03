@@ -218,6 +218,12 @@ document.addEventListener("DOMContentLoaded", function () {
         // Vaciar visualmente el carrito
         productosLista.innerHTML = ""; 
 
+        // Vaciar el carrito en el localStorage
+        localStorage.removeItem("carrito");
+
+        // También vaciar el carrito en la variable global
+        let carrito = [];
+        
         // Cierra el modal de contacto
         contactoModal.style.display = "none";
     });
