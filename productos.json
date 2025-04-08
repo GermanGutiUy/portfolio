@@ -20,7 +20,7 @@
   {
     "nombre": "Desarrollo Power BI - Tableau",
     "descripcion": "Diseño dashboards interactivos y reportes visuales que convierten datos en decisiones. Utilizo herramientas como Power BI y Tableau para crear paneles claros, visuales y personalizados, adaptados a tus objetivos. Mi enfoque combina análisis, diseño y narrativa de datos para que siempre tengas el control de tu información.",
-    "imagen": "assets/servicios/Power_Bi.jpg.jpg",
+    "imagen": "assets/servicios/Power_Bi.jpg",
     "id": "btnPowerBi"
   }  
 ]
