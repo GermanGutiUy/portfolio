@@ -18,7 +18,7 @@ fetch('../productos.json')
                     Añadir al Carrito
                   </button>
                 </div>
-                <img class="img-fluid" src="${producto.imagen}" alt="Imagen de ${producto.nombre}" />
+                <img class="img-fluid2" src="${producto.imagen}" alt="Imagen de ${producto.nombre}" />
               </div>
             </div>
           </div>
