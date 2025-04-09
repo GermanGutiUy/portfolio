@@ -208,9 +208,9 @@ document.addEventListener("DOMContentLoaded", function () {
             emailjs.send("service_ll9rmqj", "template_k2rb9k8", {
                 name: name,
                 email: email,
-                telefono: phone, // Cambiado de 'phone' a 'telefono'
-                mensaje: productosSeleccionadosText // Cambiado de 'productos' a 'mensaje'
-            })
+                telefono: phone,
+                mensaje: productosSeleccionadosText
+            })            
             .then(function(response) {
                 console.log("SUCCESS", response);
                 alert("¡Mensaje enviado con éxito!");
