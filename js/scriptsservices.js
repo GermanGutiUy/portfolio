@@ -1,3 +1,47 @@
+// Declaraciones globales
+let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
+
+// Función para actualizar la lista de productos en el carrito
+function actualizarListaProductos() {
+    const listaProductos = document.getElementById("productos-seleccionados");
+    if (!listaProductos) return;
+
+    listaProductos.innerHTML = ""; // Limpiamos la lista antes de agregar los productos
+
+    if (carrito.length === 0) {
+        let mensajeVacio = document.createElement("li");
+        mensajeVacio.textContent = "El carrito está vacío";
+        mensajeVacio.classList.add("list-group-item", "text-muted");
+        listaProductos.appendChild(mensajeVacio);
+        return;
+    }
+
+    carrito.forEach(producto => {
+        let item = document.createElement("li");
+        item.textContent = producto.nombre;
+        item.classList.add("list-group-item");
+        listaProductos.appendChild(item);
+    });
+}
+
+// Función para actualizar el carrito en el almacenamiento local y en la vista
+function actualizarCarrito() {
+    localStorage.setItem("carrito", JSON.stringify(carrito));
+
+    const listaProductos = document.getElementById("productos-lista");
+    if (!listaProductos) return; // Evitar errores si el elemento no existe
+
+    listaProductos.innerHTML = "";
+
+    carrito.forEach(producto => {
+        let item = document.createElement("li");
+        item.textContent = producto.nombre; // Solo el nombre del servicio
+        listaProductos.appendChild(item);
+    });
+
+    actualizarListaProductos();
+}
+
 // Cargar el archivo JSON con los servicios
 fetch('../productos.json')
   .then(response => response.json())
@@ -26,54 +70,6 @@ fetch('../productos.json')
       `;
       container.innerHTML += productCard;
     });
-
-    // Obtener el carrito desde localStorage
-    let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
-
-    // Función para actualizar la lista de productos en el carrito
-    function actualizarListaProductos() {
-        const listaProductos = document.getElementById("productos-seleccionados");
-        if (!listaProductos) return;
-
-        listaProductos.innerHTML = ""; // Limpiamos la lista antes de agregar los productos
-
-        if (carrito.length === 0) {
-            let mensajeVacio = document.createElement("li");
-            mensajeVacio.textContent = "El carrito está vacío";
-            mensajeVacio.classList.add("list-group-item", "text-muted");
-            listaProductos.appendChild(mensajeVacio);
-            return;
-        }
-
-        carrito.forEach(producto => {
-            let item = document.createElement("li");
-            item.textContent = producto.nombre;
-            item.classList.add("list-group-item");
-            listaProductos.appendChild(item);
-        });
-    }
-
-    document.getElementById("btn-empezar").addEventListener("click", function () {
-        actualizarListaProductos(); // Actualiza la lista de productos antes de mostrar el modal
-    });
-
-    // Función para actualizar el carrito en el almacenamiento local y en la vista
-    function actualizarCarrito() {
-        localStorage.setItem("carrito", JSON.stringify(carrito));
-
-        const listaProductos = document.getElementById("productos-lista");
-        if (!listaProductos) return; // Evitar errores si el elemento no existe
-        
-        listaProductos.innerHTML = "";
-
-        carrito.forEach(producto => {
-            let item = document.createElement("li");
-            item.textContent = producto.nombre; // Solo el nombre del servicio
-            listaProductos.appendChild(item);
-        });
-
-        actualizarListaProductos();
-    }
 
     // Función para agregar productos al carrito
     function manejarProducto(producto) {
@@ -138,174 +134,184 @@ fetch('../productos.json')
 
 // Mostrar el listado de productos seleccionados en el formulario al cargar la página
 document.addEventListener("DOMContentLoaded", function () {
-    let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
     actualizarListaProductos();
 });
 
 // Al cargar la página de contacto
 document.addEventListener("DOMContentLoaded", function () {
     // Recuperar el carrito del localStorage
-    let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
+    carrito = JSON.parse(localStorage.getItem("carrito")) || [];
 
-    if (carrito.length === 0) {
+    if (carrito.length > 0) {
         const listaServicios = document.getElementById("productos-seleccionados");
-        if (!listaServicios) return;
+        if (listaServicios) {
+            // Se muestra la lista actualizada
+            actualizarListaProductos();
+        }
+    }
+});
 
-        carrito.forEach(producto => {
-            let item = document.createElement("li");
-            item.textContent = producto.nombre;
-            item.classList.add("list-group-item");
-            listaServicios.appendChild(item);
+// Modal de Contacto Verif y envío de formulario vía EmailJS
+document.addEventListener("DOMContentLoaded", function () {
+    const contactForm = document.getElementById("contactForm");
+    if (!contactForm) return;
+
+    contactForm.addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const inputs = contactForm.querySelectorAll('input');
+        const productosSeleccionados = document.getElementById("productos-seleccionados");
+        let isValid = true;
+
+        // Validar los campos del formulario (nombre, email, teléfono)
+        inputs.forEach(input => {
+            if (!input.checkValidity()) {
+                isValid = false;
+                input.classList.add('is-invalid');
+            } else {
+                input.classList.remove('is-invalid');
+            }
         });
-    }
-});
 
-// Modal de Contacto Verif
-document.getElementById('contactForm').addEventListener('submit', function(event) {
-    event.preventDefault(); 
-
-    const form = event.target;
-    const inputs = form.querySelectorAll('input');
-    const productosSeleccionados = document.getElementById("productos-seleccionados");
-
-    let isValid = true;
-
-    // Validar los campos del formulario (nombre, email, teléfono)
-    inputs.forEach(input => {
-        if (!input.checkValidity()) {
+        // Verificar si hay productos seleccionados
+        if (productosSeleccionados.children.length === 0) {
             isValid = false;
-            input.classList.add('is-invalid');
+            alert("⚠️ Debes seleccionar al menos un producto antes de enviar el formulario.");
+        }
+
+        if (isValid) {
+            alert("✅ Formulario enviado correctamente. Vaciando carrito...");
+
+            // Vaciar el carrito visualmente
+            const productosLista = document.getElementById("productos-lista");
+            if (productosLista) {
+                productosLista.innerHTML = "";
+            }
+
+            // Vaciar el carrito en el localStorage y en la variable global
+            localStorage.removeItem("carrito");
+            carrito = [];
+
+            // Inicializar EmailJS
+            emailjs.init("dH_2F8RtZYGMW85JB"); // Reemplaza con tu PUBLIC KEY de EmailJS
+
+            // Obtener valores del formulario
+            const name = document.getElementById("name").value;
+            const email = document.getElementById("email").value;
+            const phone = document.getElementById("phone").value;
+            // Construir una cadena con los productos seleccionados
+            const productosSeleccionadosText = Array.from(productosSeleccionados.children)
+                                                .map(li => li.textContent)
+                                                .join(", ");
+
+            // Enviar el formulario a través de EmailJS
+            emailjs.send("service_ll9rmqj", "template_k2rb9k8", {
+                name: name,
+                email: email,
+                phone: phone,
+                productos: productosSeleccionadosText
+            })
+            .then(function(response) {
+                console.log("SUCCESS", response);
+                alert("¡Mensaje enviado con éxito!");
+                contactForm.reset(); // Limpia el formulario
+            }, function(error) {
+                console.log("FAILED", error);
+                alert("Hubo un error al enviar el mensaje.");
+            });
+
+            // Cerrar el modal de contacto, si existe
+            const contactoModal = document.getElementById("contacto-modal");
+            if (contactoModal) {
+                contactoModal.style.display = "none";
+            }
+            // Finalmente, si deseas seguir con el envío por defecto (por ejemplo, redirigir) puedes hacerlo aquí
+            // contactForm.submit();
         } else {
-            input.classList.remove('is-invalid');
+            alert("⚠️ El formulario no se ha enviado correctamente. Por favor, revisa los campos e intenta nuevamente.");
         }
     });
-
-    // Verificar si hay productos seleccionados
-    if (productosSeleccionados.children.length === 0) {
-        isValid = false;
-        alert("⚠️ Debes seleccionar al menos un producto antes de enviar el formulario.");
-    }
-
-    // Si todo es válido, enviar el formulario
-    if (isValid) {
-        form.submit();
-    }
 });
 
-// Modal de Contacto Verif
-document.getElementById('contactForm').addEventListener('submit', function(event) {
-    event.preventDefault();
-
-    const form = event.target;
-    const inputs = form.querySelectorAll('input');
-    const productosSeleccionados = document.getElementById("productos-seleccionados");
-
-    let isValid = true;
-
-    // Validar los campos del formulario (nombre, email, teléfono)
-    inputs.forEach(input => {
-        if (!input.checkValidity()) {
-            isValid = false;
-            input.classList.add('is-invalid');
-        } else {
-            input.classList.remove('is-invalid');
-        }
-    });
-
-    // Verificar si hay productos seleccionados
-    if (productosSeleccionados.children.length === 0) {
-        isValid = false;
-        alert("⚠️ Debes seleccionar al menos un producto antes de enviar el formulario.");
-    }
-
-    // Si todo es válido, enviar el formulario
-    if (isValid) {
-        alert("✅ Formulario enviado correctamente. Vaciando carrito...");
-
-        // Vaciar el carrito visualmente
-        productosLista.innerHTML = ""; 
-
-        // Vaciar el carrito en el localStorage
-        localStorage.removeItem("carrito");
-
-        // vaciar el carrito en la variable global
-        let carrito = [];
-        
-        // Cierra el modal de contacto
-        contactoModal.style.display = "none";
-        
-        form.submit(); // Ahora se envía el formulario
-    } else {
-        alert("⚠️ El formulario no se ha enviado correctamente. Por favor, revisa los campos e intenta nuevamente.");
-    }
-});
-// Modal de Contacto
-
-// Modal de Contacto
+// Modal de Contacto (para abrir y cerrar modales)
 document.addEventListener("DOMContentLoaded", function () {
     const carritoModal = document.getElementById("carrito-modal");
     const contactoModal = document.getElementById("contacto-modal");
     const empezarBtn = document.getElementById("btn-empezar");
     const closeCarritoBtn = document.getElementById("close-btn");
     const closeContactoBtn = document.getElementById("close-contacto-btn");
-    const contactForm = document.getElementById("contactForm");
-    const productosLista = document.getElementById("productos-lista"); // UL del carrito
-    const productosSeleccionados = document.getElementById("productos-seleccionados"); // UL en el formulario
+    const productosSeleccionados = document.getElementById("productos-seleccionados");
+    const productosLista = document.getElementById("productos-lista");
 
     // Función para verificar si hay productos en el carrito
     function carritoNoEstaVacio() {
-        return productosLista.children.length > 0;
+        return (productosLista && productosLista.children.length > 0);
     }
 
     // Función para mostrar los productos en el modal de contacto
     function mostrarProductosSeleccionados() {
-        const carrito = JSON.parse(localStorage.getItem("carrito")) || []; // Obtener el carrito desde el localStorage
-        productosSeleccionados.innerHTML = "";
-
-        carrito.forEach(producto => {
-            const li = document.createElement("li");
-            li.classList.add("list-group-item");
-            li.textContent = producto.nombre; // Asume que cada producto tiene un atributo 'nombre'
-            productosSeleccionados.appendChild(li);
-        });
+        const carritoLocal = JSON.parse(localStorage.getItem("carrito")) || []; // Obtener el carrito desde localStorage
+        if (productosSeleccionados) {
+            productosSeleccionados.innerHTML = "";
+            carritoLocal.forEach(producto => {
+                const li = document.createElement("li");
+                li.classList.add("list-group-item");
+                li.textContent = producto.nombre; // Asume que cada producto tiene un atributo 'nombre'
+                productosSeleccionados.appendChild(li);
+            });
+        }
     }
 
     // Abre el modal de carrito
     function abrirCarritoModal() {
-        carritoModal.style.display = "block";
+        if (carritoModal) {
+            carritoModal.style.display = "block";
+        }
     }
 
     // Cierra el modal de carrito
     function cerrarCarritoModal() {
-        carritoModal.style.display = "none";
+        if (carritoModal) {
+            carritoModal.style.display = "none";
+        }
     }
 
     // Abre el modal de contacto
     function abrirContactoModal() {
-        contactoModal.style.display = "block";
+        if (contactoModal) {
+            contactoModal.style.display = "block";
+        }
     }
 
     // Cierra el modal de contacto
     function cerrarContactoModal() {
-        contactoModal.style.display = "none";
+        if (contactoModal) {
+            contactoModal.style.display = "none";
+        }
     }
 
     // Mostrar modal de contacto al hacer clic en ¡Empecemos! si el carrito no está vacío
-    empezarBtn.addEventListener("click", function () {
-        if (!carritoNoEstaVacio()) {
-            alert("⚠️ El carrito está vacío. Agrega productos antes de continuar.");
-        } else {
-            cerrarCarritoModal();
-            abrirContactoModal();
-            mostrarProductosSeleccionados(); // Mostrar productos cuando se abra el modal de contacto
-        }
-    });
+    if (empezarBtn) {
+        empezarBtn.addEventListener("click", function () {
+            if (!carritoNoEstaVacio()) {
+                alert("⚠️ El carrito está vacío. Agrega productos antes de continuar.");
+            } else {
+                cerrarCarritoModal();
+                abrirContactoModal();
+                mostrarProductosSeleccionados(); // Mostrar productos cuando se abra el modal de contacto
+            }
+        });
+    }
 
     // Cerrar el modal de carrito
-    closeCarritoBtn.addEventListener("click", cerrarCarritoModal);
+    if (closeCarritoBtn) {
+        closeCarritoBtn.addEventListener("click", cerrarCarritoModal);
+    }
 
     // Cerrar el modal de contacto
-    closeContactoBtn.addEventListener("click", cerrarContactoModal);
+    if (closeContactoBtn) {
+        closeContactoBtn.addEventListener("click", cerrarContactoModal);
+    }
 
     // Cerrar los modales si se hace clic fuera de ellos
     window.addEventListener("click", function (event) {
@@ -316,78 +322,4 @@ document.addEventListener("DOMContentLoaded", function () {
             cerrarCarritoModal();
         }
     });
-
-    // Validación del formulario antes de enviarlo
-    contactForm.addEventListener("submit", function (event) {
-        event.preventDefault(); // Evita el envío inmediato del formulario
-
-        const inputs = contactForm.querySelectorAll('input');
-        let isValid = true;
-
-        // Validar los campos del formulario (nombre, email, teléfono)
-        inputs.forEach(input => {
-            if (!input.checkValidity()) {
-                isValid = false;
-                input.classList.add('is-invalid'); // Agregar la clase para mostrar el error
-            } else {
-                input.classList.remove('is-invalid'); // Remover la clase si es válido
-            }
-        });
-
-        // Verificar si hay productos seleccionados
-        if (productosSeleccionados.children.length === 0) {
-            isValid = false;
-            alert("⚠️ Debes seleccionar al menos un producto antes de enviar el formulario.");
-        }
-
-        // Si todo es válido, enviar el formulario
-        if (isValid) {
-            alert("✅ Formulario enviado correctamente. Vaciando carrito...");
-
-            // Vaciar el carrito visualmente
-            productosLista.innerHTML = ""; 
-
-            // Vaciar el carrito en el localStorage
-            localStorage.removeItem("carrito");
-
-            // También vaciar el carrito en la variable global
-            let carrito = [];
-            
-            // Inicializar EmailJS
-            emailjs.init("dH_2F8RtZYGMW85JB"); // Reemplaza con tu PUBLIC KEY de EmailJS
-
-            // Enviar el formulario a través de EmailJS
-            // Obtener valores del formulario
-            const name = document.getElementById("name").value;
-            const email = document.getElementById("email").value;
-            const phone = document.getElementById("phone").value;
-            // Construir una cadena con los productos seleccionados
-            const productosSeleccionadosText = Array.from(productosSeleccionados.children).map(li => li.textContent).join(", ");
-
-            emailjs.send("service_ll9rmqj", "template_k2rb9k8", {
-                name: name,
-                email: email,
-                phone: phone,
-                productos: productosSeleccionadosText
-            })
-            .then(function(response) {
-                console.log("SUCCESS", response);
-                alert("¡Mensaje enviado con éxito!");
-                document.getElementById("contactForm").reset(); // Limpia el formulario
-            }, function(error) {
-                console.log("FAILED", error);
-                alert("Hubo un error al enviar el mensaje.");
-            });
-
-            // Cierra el modal de contacto
-            cerrarContactoModal();
-
-            // Enviar el formulario después de todo el proceso
-            contactForm.submit();
-        } else {
-            // Si la validación no pasa, mostrar un mensaje
-            alert("⚠️ El formulario no se ha enviado correctamente. Por favor, revisa los campos e intenta nuevamente.");
-        }
-    });
 });
-// Modal de Contacto
