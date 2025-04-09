@@ -208,8 +208,8 @@ document.addEventListener("DOMContentLoaded", function () {
             emailjs.send("service_ll9rmqj", "template_k2rb9k8", {
                 name: name,
                 email: email,
-                phone: phone,
-                productos: productosSeleccionadosText
+                telefono: phone, // Cambiado de 'phone' a 'telefono'
+                mensaje: productosSeleccionadosText // Cambiado de 'productos' a 'mensaje'
             })
             .then(function(response) {
                 console.log("SUCCESS", response);
