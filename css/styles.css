@@ -11765,6 +11765,14 @@ html {
   max-width: 600px;
 }
 
+/* Espacio entre los elementos del listado */
+.modal-content ul#productos-lista li {
+  margin-bottom: 10px; /* Ajustá el valor según el espacio que quieras */
+  padding: 5px 0;
+  border-bottom: 1px solid #ddd; /* Opcional: agrega una línea divisoria sutil */
+}
+
+
 /* Estilo de la "x" para cerrar el modal */
 .close {
   color: #aaa;
