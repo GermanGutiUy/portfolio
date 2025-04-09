@@ -11767,9 +11767,15 @@ html {
 
 /* Espacio entre los elementos del listado */
 .modal-content ul#productos-lista li {
-  margin-bottom: 10px; /* Ajustá el valor según el espacio que quieras */
+  margin-bottom: 10px;
   padding: 5px 0;
-  border-bottom: 1px solid #ddd; /* Opcional: agrega una línea divisoria sutil */
+  border-bottom: 1px solid #ddd;
+}
+
+/* Espacio entre los botones "Empecemos" y "Vaciar" */
+#vaciar-btn {
+  display: inline-block;
+  margin-top: 0.5rem;
 }
 
 
