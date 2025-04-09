@@ -11775,7 +11775,7 @@ html {
 /* Espacio entre los botones "Empecemos" y "Vaciar" */
 #vaciar-btn {
   display: inline-block;
-  margin-top: 0.5rem;
+  margin-top: 1rem;
 }
 
 
