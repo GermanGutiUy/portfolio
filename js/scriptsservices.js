@@ -364,7 +364,7 @@ document.addEventListener("DOMContentLoaded", function () {
             // Construir una cadena con los productos seleccionados
             const productosSeleccionadosText = Array.from(productosSeleccionados.children).map(li => li.textContent).join(", ");
 
-            emailjs.send("service_ll9rmqj", "template_rg7hz3i", {
+            emailjs.send("service_ll9rmqj", "template_k2rb9k8", {
                 name: name,
                 email: email,
                 phone: phone,
