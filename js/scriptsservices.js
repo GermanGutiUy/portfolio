@@ -239,7 +239,7 @@ document.getElementById('contactForm').addEventListener('submit', function(event
         alert("⚠️ El formulario no se ha enviado correctamente. Por favor, revisa los campos e intenta nuevamente.");
     }
 });
-// Modal de Contacto Verif
+// Modal de Contacto
 
 // Modal de Contacto
 document.addEventListener("DOMContentLoaded", function () {
@@ -353,6 +353,32 @@ document.addEventListener("DOMContentLoaded", function () {
             // También vaciar el carrito en la variable global
             let carrito = [];
             
+            // Inicializar EmailJS
+            emailjs.init("dH_2F8RtZYGMW85JB"); // Reemplaza con tu PUBLIC KEY de EmailJS
+
+            // Enviar el formulario a través de EmailJS
+            // Obtener valores del formulario
+            const name = document.getElementById("name").value;
+            const email = document.getElementById("email").value;
+            const phone = document.getElementById("phone").value;
+            // Construir una cadena con los productos seleccionados
+            const productosSeleccionadosText = Array.from(productosSeleccionados.children).map(li => li.textContent).join(", ");
+
+            emailjs.send("service_ll9rmqj", "template_rg7hz3i", {
+                name: name,
+                email: email,
+                phone: phone,
+                productos: productosSeleccionadosText
+            })
+            .then(function(response) {
+                console.log("SUCCESS", response);
+                alert("¡Mensaje enviado con éxito!");
+                document.getElementById("contactForm").reset(); // Limpia el formulario
+            }, function(error) {
+                console.log("FAILED", error);
+                alert("Hubo un error al enviar el mensaje.");
+            });
+
             // Cierra el modal de contacto
             cerrarContactoModal();
 
