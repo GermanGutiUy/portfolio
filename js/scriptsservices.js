@@ -205,7 +205,7 @@ document.addEventListener("DOMContentLoaded", function () {
                                                 .join(", ");
 
             // Enviar el formulario a través de EmailJS
-            emailjs.send("service_30rjg1e", "template_k2rb9k8", {
+            emailjs.send("service_ll9rmqj", "template_k2rb9k8", {
                 name: name,
                 email: email,
                 telefono: phone,
