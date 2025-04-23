@@ -590,7 +590,7 @@ progress {
   color: #6c757d;
 }
 .blockquote-footer::before {
-  content: "— ";
+  content: "— ";
 }
 
 .img-fluid {
@@ -1231,6 +1231,113 @@ progress {
   .gy-md-5 {
     --bs-gutter-y: 3rem;
   }
+}
+
+/* Responsive Navigation */
+@media (max-width: 991.98px) {
+    .navbar-collapse {
+        background: white;
+        padding: 1rem;
+        border-radius: 0.5rem;
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    }
+    
+    .navbar-nav {
+        gap: 0.5rem;
+    }
+    
+    .nav-link {
+        padding: 0.5rem 1rem;
+        border-radius: 0.25rem;
+    }
+    
+    .nav-link:hover {
+        background-color: var(--bs-gray-100);
+    }
+}
+
+/* Responsive Header */
+@media (max-width: 767.98px) {
+    .display-3 {
+        font-size: 2.5rem;
+    }
+    
+    .fs-3 {
+        font-size: 1.25rem !important;
+    }
+    
+    .btn-lg {
+        padding: 0.75rem 1.5rem;
+        font-size: 1rem;
+    }
+    
+    #container_profile {
+        text-align: center;
+    }
+    
+    .profile {
+        margin: 2rem auto;
+        max-width: 300px;
+    }
+}
+
+/* Responsive Profile Section */
+@media (max-width: 575.98px) {
+    .profile {
+        max-width: 250px;
+    }
+    
+    .profile .profile-img {
+        width: 200px;
+        height: 200px;
+    }
+    
+    .dots-1, .dots-2, .dots-3, .dots-4 {
+        display: none;
+    }
+}
+
+/* Responsive About Section */
+@media (max-width: 767.98px) {
+    .lead {
+        font-size: 1.1rem;
+    }
+    
+    .text-muted {
+        font-size: 0.95rem;
+    }
+    
+    .fs-2 {
+        font-size: 1.5rem !important;
+    }
+}
+
+/* Responsive Footer */
+@media (max-width: 575.98px) {
+    footer .container {
+        text-align: center;
+    }
+    
+    footer .col-auto {
+        margin-bottom: 1rem;
+    }
+}
+
+/* General Responsive Improvements */
+@media (max-width: 991.98px) {
+    .container {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+    
+    .py-5 {
+        padding-top: 3rem !important;
+        padding-bottom: 3rem !important;
+    }
+    
+    .mb-5 {
+        margin-bottom: 2rem !important;
+    }
 }
 @media (min-width: 992px) {
   .col-lg {
